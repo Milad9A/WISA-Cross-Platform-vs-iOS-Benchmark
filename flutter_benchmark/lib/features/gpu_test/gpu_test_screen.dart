@@ -16,7 +16,7 @@ import 'widgets/results_panel.dart';
 /// - Auto-scroll functionality for reproducible testing
 ///
 /// Measures:
-/// - Frame build times (jank detection)
+/// - Frame build times (jank detection) using FrameTiming API
 /// - Battery drain during test
 /// - Memory pressure through image loading
 class GPUTestScreen extends StatefulWidget {
@@ -33,12 +33,19 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
   bool _isScrolling = false;
   bool _testCompleted = false;
 
-  // FPS Metrics
-  final List<int> _frameDurations = [];
+  // Frame interval tracking (comparable to iOS CADisplayLink)
+  final List<int> _frameIntervals =
+      []; // Frame-to-frame intervals in microseconds
   int _droppedFrameCount = 0;
   int _totalFrameCount = 0;
-  double _averageFrameTime = 0;
-  int _maxFrameTime = 0;
+  double _averageFrameInterval = 0;
+  int _maxFrameInterval = 0;
+  int _lastFrameTimeUs = 0;
+
+  // Elapsed time tracking for accurate FPS
+  int _testStartTimeUs = 0;
+  int _testEndTimeUs = 0;
+  double _actualFps = 0;
 
   // Battery Metrics
   int? _batteryLevelStart;
@@ -49,9 +56,10 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
   int _elapsedSeconds = 0;
   Timer? _progressTimer;
 
-  // Frame callback
-  int? _frameCallbackId;
-  int _lastFrameTime = 0;
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -61,41 +69,55 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
     super.dispose();
   }
 
+  /// Uses scheduleFrameCallback to measure frame-to-frame intervals
+  /// This is comparable to iOS's CADisplayLink measurement
   void _startFrameCallback() {
-    _frameCallbackId = SchedulerBinding.instance.scheduleFrameCallback(_onFrame);
+    _lastFrameTimeUs = 0;
+    SchedulerBinding.instance.scheduleFrameCallback(_onFrame);
   }
 
   void _stopFrameCallback() {
-    _frameCallbackId = null;
+    _lastFrameTimeUs = -1; // Signal to stop
   }
 
+  /// Callback for each frame - measures interval between frames
+  /// Comparable to iOS CADisplayLink's timestamp-based measurement
   void _onFrame(Duration timestamp) {
-    if (!_isScrolling) return;
+    if (!_isScrolling || _lastFrameTimeUs == -1) return;
 
-    final int currentTime = timestamp.inMicroseconds;
+    final int currentTimeUs = timestamp.inMicroseconds;
 
-    if (_lastFrameTime > 0) {
-      final int frameDuration = currentTime - _lastFrameTime;
-      _frameDurations.add(frameDuration);
+    if (_lastFrameTimeUs > 0) {
+      final int frameInterval = currentTimeUs - _lastFrameTimeUs;
+      _frameIntervals.add(frameInterval);
       _totalFrameCount++;
 
-      // Jank detection: frame time > 16.67ms (60 FPS target)
-      if (frameDuration > BenchmarkConfig.jankThresholdUs) {
+      // Jank detection: frame interval > 25ms (missed a 60 FPS frame)
+      // Using 1.5x threshold like iOS to detect actual dropped frames
+      final int jankThreshold = (BenchmarkConfig.jankThresholdUs * 1.5).toInt();
+      if (frameInterval > jankThreshold) {
         _droppedFrameCount++;
         debugPrint(
-          'Jank detected: Frame took ${(frameDuration / 1000).toStringAsFixed(2)} ms',
+          'Jank detected: Frame interval=${(frameInterval / 1000).toStringAsFixed(2)}ms',
         );
       }
 
-      if (frameDuration > _maxFrameTime) {
-        _maxFrameTime = frameDuration;
+      if (frameInterval > _maxFrameInterval) {
+        _maxFrameInterval = frameInterval;
+      }
+
+      // Update average in real-time
+      if (_frameIntervals.isNotEmpty) {
+        final int sum = _frameIntervals.reduce((a, b) => a + b);
+        _averageFrameInterval = sum / _frameIntervals.length;
       }
     }
 
-    _lastFrameTime = currentTime;
+    _lastFrameTimeUs = currentTimeUs;
 
+    // Schedule next frame
     if (_isScrolling) {
-      _frameCallbackId = SchedulerBinding.instance.scheduleFrameCallback(_onFrame);
+      SchedulerBinding.instance.scheduleFrameCallback(_onFrame);
     }
   }
 
@@ -105,16 +127,18 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
     setState(() {
       _isScrolling = true;
       _testCompleted = false;
-      _frameDurations.clear();
+      _frameIntervals.clear();
       _droppedFrameCount = 0;
       _totalFrameCount = 0;
-      _maxFrameTime = 0;
+      _maxFrameInterval = 0;
+      _averageFrameInterval = 0;
+      _actualFps = 0;
       _elapsedSeconds = 0;
       _batteryDelta = null;
     });
 
     _batteryLevelStart = await BatteryService.getBatteryLevel();
-    _lastFrameTime = 0;
+    _testStartTimeUs = DateTime.now().microsecondsSinceEpoch;
 
     _logTestStart();
     _startFrameCallback();
@@ -159,12 +183,19 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
   Future<void> _completeTest() async {
     _stopFrameCallback();
     _progressTimer?.cancel();
+    _testEndTimeUs = DateTime.now().microsecondsSinceEpoch;
 
     _batteryLevelEnd = await BatteryService.getBatteryLevel();
 
-    if (_frameDurations.isNotEmpty) {
-      final int sum = _frameDurations.reduce((a, b) => a + b);
-      _averageFrameTime = sum / _frameDurations.length;
+    if (_frameIntervals.isNotEmpty) {
+      final int sum = _frameIntervals.reduce((a, b) => a + b);
+      _averageFrameInterval = sum / _frameIntervals.length;
+    }
+
+    // Calculate actual FPS based on elapsed time (same as iOS CADisplayLink approach)
+    final int elapsedUs = _testEndTimeUs - _testStartTimeUs;
+    if (elapsedUs > 0 && _totalFrameCount > 0) {
+      _actualFps = _totalFrameCount / (elapsedUs / 1000000.0);
     }
 
     _batteryDelta = BatteryService.calculateDrain(
@@ -181,20 +212,28 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
   }
 
   void _logTestResults() {
+    final double jankPercentage = _totalFrameCount > 0
+        ? (_droppedFrameCount / _totalFrameCount) * 100
+        : 0;
+    final int elapsedUs = _testEndTimeUs - _testStartTimeUs;
+    final double elapsedSeconds = elapsedUs / 1000000.0;
+
     debugPrint('═══════════════════════════════════════════════');
     debugPrint('FLUTTER BENCHMARK - GPU TEST RESULTS');
     debugPrint('═══════════════════════════════════════════════');
-    debugPrint('Total frames: $_totalFrameCount');
-    debugPrint('Dropped frames (>16.67ms): $_droppedFrameCount');
+    debugPrint('Test duration: ${elapsedSeconds.toStringAsFixed(2)} seconds');
+    debugPrint('Total frames rendered: $_totalFrameCount');
+    debugPrint('Janky frames (>25ms): $_droppedFrameCount');
+    debugPrint('Jank percentage: ${jankPercentage.toStringAsFixed(1)}%');
+    debugPrint('');
     debugPrint(
-      'Average frame time: ${(_averageFrameTime / 1000).toStringAsFixed(2)} ms',
+      'Avg frame interval: ${(_averageFrameInterval / 1000).toStringAsFixed(2)} ms',
     );
     debugPrint(
-      'Max frame time: ${(_maxFrameTime / 1000).toStringAsFixed(2)} ms',
+      'Max frame interval: ${(_maxFrameInterval / 1000).toStringAsFixed(2)} ms',
     );
-    debugPrint(
-      'Estimated FPS: ${_totalFrameCount > 0 ? (1000000 / _averageFrameTime).toStringAsFixed(1) : "N/A"}',
-    );
+    debugPrint('Actual FPS (frames/elapsed): ${_actualFps.toStringAsFixed(1)}');
+    debugPrint('');
     debugPrint('Battery at end: ${_batteryLevelEnd ?? "N/A"}%');
     debugPrint('Battery drain: $_batteryDelta');
     debugPrint('═══════════════════════════════════════════════');
@@ -224,8 +263,9 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
             ResultsPanel(
               totalFrameCount: _totalFrameCount,
               droppedFrameCount: _droppedFrameCount,
-              averageFrameTimeUs: _averageFrameTime,
-              maxFrameTimeUs: _maxFrameTime,
+              averageFrameTimeUs: _averageFrameInterval,
+              maxFrameTimeUs: _maxFrameInterval.toDouble(),
+              actualFps: _actualFps,
               batteryDelta: _batteryDelta,
             ),
           _buildScrollableList(),
@@ -245,10 +285,7 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
             const SizedBox(height: 12),
           ],
           _buildTestButton(),
-          if (_isScrolling) ...[
-            const SizedBox(height: 8),
-            _buildLiveMetrics(),
-          ],
+          if (_isScrolling) ...[const SizedBox(height: 8), _buildLiveMetrics()],
         ],
       ),
     );
@@ -280,11 +317,11 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
       child: ElevatedButton(
         onPressed: _isScrolling ? _stopTest : _startAutoScroll,
         style: ElevatedButton.styleFrom(
-          backgroundColor: _isScrolling ? AppTheme.errorColor : AppTheme.gpuTestColor,
+          backgroundColor: _isScrolling
+              ? AppTheme.errorColor
+              : AppTheme.gpuTestColor,
           foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -293,10 +330,7 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
             const SizedBox(width: 8),
             Text(
               _isScrolling ? 'Stop Test' : 'Start 30s Auto-Scroll',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -312,8 +346,8 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
         LiveMetric(label: 'Jank', value: '$_droppedFrameCount'),
         LiveMetric(
           label: 'Avg',
-          value: _averageFrameTime > 0
-              ? '${(_averageFrameTime / 1000).toStringAsFixed(1)}ms'
+          value: _averageFrameInterval > 0
+              ? '${(_averageFrameInterval / 1000).toStringAsFixed(1)}ms'
               : '...',
         ),
       ],

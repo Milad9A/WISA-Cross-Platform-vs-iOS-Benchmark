@@ -61,8 +61,13 @@ class DisplayLinkManager: ObservableObject {
             frameDurations.append(frameDuration)
             totalFrameCount += 1
 
-            // Jank detection: frame time > 16.67ms (missing 60 FPS target)
-            if frameDuration > targetFrameTime * 1.5 {  // Allow 50% buffer
+            // Jank detection: frame took significantly longer than target
+            // A frame is "janky" if it missed its deadline by more than 50%
+            // This accounts for VSync timing variations while detecting actual dropped frames
+            // On 60Hz: normal = ~16.67ms, jank threshold = ~25ms (missed frame)
+            // On 120Hz: normal = ~8.33ms, jank threshold = ~12.5ms
+            let jankThreshold = targetFrameTime * 1.5
+            if frameDuration > jankThreshold {
                 droppedFrameCount += 1
                 print(
                     "Jank detected: Frame took \(String(format: "%.2f", frameDuration * 1000)) ms")

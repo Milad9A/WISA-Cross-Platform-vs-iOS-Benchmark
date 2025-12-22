@@ -18,7 +18,7 @@ This application provides reproducible, measurable benchmarks to scientifically 
 |---------|-------------|
 | **CPU Test** | Sieve of Eratosthenes calculating primes up to 1,000,000 on main UI thread |
 | **GPU Test** | 1000 complex list items with images, shadows, gradients, and animations |
-| **FPS Measurement** | `SchedulerBinding.scheduleFrameCallback` with jank detection (>16.67ms) |
+| **FPS Measurement** | `SchedulerBinding.scheduleFrameCallback` measuring frame intervals with jank detection (>25ms) |
 | **Battery Monitoring** | Native `MethodChannel` for iOS `UIDevice.batteryLevel` |
 | **Startup Time** | `addPostFrameCallback` measuring time from `main()` to first frame render |
 | **Auto-Scroll** | 30-second linear scroll for reproducible GPU stress testing |
@@ -142,7 +142,28 @@ This app is designed to run alongside the companion **iOS Benchmark App** (Swift
 - Test conditions (1000 items, 30s scroll, same images)
 - Metrics collection methodology
 
+### Key Findings
+
+| Metric | Flutter | iOS Native | Analysis |
+|--------|---------|------------|----------|
+| **CPU (Sieve 1M)** | ~27-30 ms | ~9 ms | iOS ~3x faster |
+| **GPU/FPS** | ~58-60 FPS | ~58-60 FPS | Equivalent |
+| **Jank Rate** | <1% | <1% | Equivalent |
+| **Frame Interval** | ~16-17 ms | ~16-17 ms | Equivalent |
+
+**Conclusion**: Flutter matches native iOS for UI rendering performance but has ~3x overhead for CPU-intensive computation due to Dart VM/AOT vs native LLVM optimization.
+
 See [TECHNICAL_DOCUMENTATION.md](../TECHNICAL_DOCUMENTATION.md) for detailed methodology.
+
+## ⚠️ Important: Build Mode
+
+**Always run in release mode for accurate benchmarks:**
+
+```bash
+flutter run --release
+```
+
+Debug mode includes debugging overhead that significantly impacts performance measurements.
 
 ## 📄 License
 

@@ -7,7 +7,8 @@ class ResultsPanel extends StatelessWidget {
   final int totalFrameCount;
   final int droppedFrameCount;
   final double averageFrameTimeUs;
-  final int maxFrameTimeUs;
+  final double maxFrameTimeUs;
+  final double actualFps;
   final String? batteryDelta;
 
   const ResultsPanel({
@@ -16,16 +17,12 @@ class ResultsPanel extends StatelessWidget {
     required this.droppedFrameCount,
     required this.averageFrameTimeUs,
     required this.maxFrameTimeUs,
+    required this.actualFps,
     this.batteryDelta,
   });
 
-  double get jankPercentage => totalFrameCount > 0
-      ? (droppedFrameCount / totalFrameCount) * 100
-      : 0;
-
-  double get estimatedFps => averageFrameTimeUs > 0
-      ? 1000000 / averageFrameTimeUs
-      : 0;
+  double get jankPercentage =>
+      totalFrameCount > 0 ? (droppedFrameCount / totalFrameCount) * 100 : 0;
 
   @override
   Widget build(BuildContext context) {
@@ -109,10 +106,10 @@ class ResultsPanel extends StatelessWidget {
         const SizedBox(width: 8),
         Expanded(
           child: MetricCard(
-            label: 'Est. FPS',
-            value: estimatedFps.toStringAsFixed(1),
+            label: 'Actual FPS',
+            value: actualFps.toStringAsFixed(1),
             icon: Icons.timer,
-            color: estimatedFps >= 55 ? Colors.green : Colors.orange,
+            color: actualFps >= 55 ? Colors.green : Colors.orange,
           ),
         ),
       ],
