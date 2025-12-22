@@ -20,7 +20,7 @@ This application provides reproducible, measurable benchmarks to scientifically 
 | **GPU Test** | 1000 complex list items with images, shadows, gradients, and animations |
 | **FPS Measurement** | `CADisplayLink`-based frame timing with jank detection (>25ms for dropped frames) |
 | **Battery Monitoring** | `UIDevice.current.batteryLevel` monitoring |
-| **Startup Time** | `CFAbsoluteTimeGetCurrent()` measuring time to first view render |
+| **Startup Time** | `CFAbsoluteTimeGetCurrent()` measuring time from `StartupMetrics.init()` to first frame render |
 | **Auto-Scroll** | 30-second linear scroll using `ScrollViewReader` for reproducible testing |
 
 ## 🚀 Getting Started
@@ -137,12 +137,13 @@ This app is designed to run alongside the companion **Flutter Benchmark App** wi
 
 | Metric | iOS Native | Flutter | Analysis |
 |--------|------------|---------|----------|
+| **Startup Time** | ~67 ms | ~27 ms | Flutter ~2.5x faster |
 | **CPU (Sieve 1M)** | ~9 ms | ~27-30 ms | iOS ~3x faster |
 | **GPU/FPS** | ~58-60 FPS | ~58-60 FPS | Equivalent |
 | **Jank Rate** | <1% | <1% | Equivalent |
 | **Frame Interval** | ~16-17 ms | ~16-17 ms | Equivalent |
 
-**Conclusion**: Native iOS significantly outperforms Flutter for CPU-intensive tasks (~3x faster) due to LLVM's aggressive optimizations. However, both achieve equivalent UI rendering performance since both ultimately use Metal for GPU operations.
+**Conclusion**: Native iOS significantly outperforms Flutter for CPU-intensive tasks (~3x faster) due to LLVM's aggressive optimizations. However, Flutter has faster startup time (~2.5x faster) and both achieve equivalent UI rendering performance since both ultimately use Metal for GPU operations.
 
 See [TECHNICAL_DOCUMENTATION.md](../TECHNICAL_DOCUMENTATION.md) for detailed methodology.
 
