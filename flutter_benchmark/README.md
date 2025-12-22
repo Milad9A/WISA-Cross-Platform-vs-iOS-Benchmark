@@ -1,16 +1,153 @@
-# flutter_benchmark
+# Flutter Benchmark App
 
-A new Flutter project.
+A scientific performance benchmark application built with Flutter to compare cross-platform framework performance against Native iOS (SwiftUI). Part of the WISA (Wissenschaftliches Arbeiten) course research project.
 
-## Getting Started
+## 🎯 Purpose
 
-This project is a starting point for a Flutter application.
+This application provides reproducible, measurable benchmarks to scientifically compare Flutter's rendering engine (Impeller/Skia) against Native iOS across five key performance metrics:
 
-A few resources to get you started if this is your first Flutter project:
+1. **CPU Efficiency** - Algorithm execution time
+2. **Memory (RAM) Usage** - Runtime memory footprint
+3. **FPS Stability** - Frame rate consistency under load
+4. **Battery Impact** - Power consumption during stress tests
+5. **App Startup Time** - Time to Interactive (TTI)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## ✨ Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+| Feature | Description |
+|---------|-------------|
+| **CPU Test** | Sieve of Eratosthenes calculating primes up to 1,000,000 on main UI thread |
+| **GPU Test** | 1000 complex list items with images, shadows, gradients, and animations |
+| **FPS Measurement** | `SchedulerBinding.scheduleFrameCallback` with jank detection (>16.67ms) |
+| **Battery Monitoring** | Native `MethodChannel` for iOS `UIDevice.batteryLevel` |
+| **Startup Time** | `addPostFrameCallback` measuring time from `main()` to first frame render |
+| **Auto-Scroll** | 30-second linear scroll for reproducible GPU stress testing |
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Flutter SDK 3.10+
+- Dart 3.0+
+- Xcode 15.0+ (for iOS builds)
+- Physical iOS device (recommended for battery metrics)
+
+### Installation
+
+```bash
+# Clone or navigate to project
+cd flutter_benchmark
+
+# Get dependencies
+flutter pub get
+
+# Run in release mode for accurate benchmarks
+flutter run --release
+
+# Or profile mode for Flutter DevTools analysis
+flutter run --profile
+```
+
+### Running Benchmarks
+
+1. **Launch the app** on a physical device (simulators don't report battery)
+2. **Startup Time** is measured automatically and displayed on the home screen
+3. **CPU Test**: Tap to run the Sieve algorithm multiple times and view statistics
+4. **GPU Test**: Start the 30-second auto-scroll and observe FPS/jank metrics
+
+## 📊 Console Output
+
+All metrics are printed to the debug console in a structured format for scientific logging:
+
+```
+═══════════════════════════════════════════════
+FLUTTER BENCHMARK - CPU TEST RESULTS
+═══════════════════════════════════════════════
+Algorithm: Sieve of Eratosthenes
+Limit: 1000000
+Primes found: 78498
+Execution time: 45230 μs
+Execution time: 45.23 ms
+═══════════════════════════════════════════════
+```
+
+## 📁 Project Structure
+
+```
+lib/
+├── main.dart                           # Entry point
+├── app.dart                            # MaterialApp configuration
+├── core/
+│   ├── constants/
+│   │   └── benchmark_config.dart       # Test configuration constants
+│   ├── theme/
+│   │   └── app_theme.dart              # Dark theme configuration
+│   └── utils/
+│       └── statistics_utils.dart       # Statistical calculations
+├── features/
+│   ├── home/
+│   │   ├── home_screen.dart            # Home screen with startup time
+│   │   └── widgets/
+│   │       └── benchmark_card.dart     # Navigation cards
+│   ├── cpu_test/
+│   │   ├── cpu_test_screen.dart        # CPU benchmark UI
+│   │   ├── algorithms/
+│   │   │   └── sieve_of_eratosthenes.dart
+│   │   ├── models/
+│   │   │   └── cpu_test_result.dart
+│   │   └── widgets/
+│   │       └── cpu_result_card.dart
+│   └── gpu_test/
+│       ├── gpu_test_screen.dart        # GPU/FPS/Battery benchmark UI
+│       ├── models/
+│       │   └── gpu_test_result.dart
+│       └── widgets/
+│           ├── complex_list_item.dart  # Stress test list item
+│           └── results_panel.dart
+├── services/
+│   └── battery_service.dart            # Platform channel for battery
+└── widgets/
+    └── metric_card.dart                # Reusable metric display
+```
+
+## 🔧 Configuration
+
+All benchmark parameters are centralized in `lib/core/constants/benchmark_config.dart`:
+
+| Constant | Value | Description |
+|----------|-------|-------------|
+| `sievePrimeLimit` | 1,000,000 | Upper bound for prime calculation |
+| `expectedPrimeCount` | 78,498 | Known correct result for validation |
+| `gpuTestItemCount` | 1,000 | Number of complex list items |
+| `scrollDurationSeconds` | 30 | Duration of auto-scroll test |
+| `jankThresholdUs` | 16,667 | Frame time threshold (60 FPS target) |
+
+## 📱 iOS Integration
+
+The app uses a `MethodChannel` for battery level access:
+
+```swift
+// ios/Runner/AppDelegate.swift
+let batteryChannel = FlutterMethodChannel(
+    name: "flutter_benchmark/battery",
+    binaryMessenger: controller.binaryMessenger
+)
+```
+
+## 📈 Comparison with Native iOS
+
+This app is designed to run alongside the companion **iOS Benchmark App** (SwiftUI) with identical:
+
+- Algorithms (Sieve of Eratosthenes)
+- Test conditions (1000 items, 30s scroll, same images)
+- Metrics collection methodology
+
+See [TECHNICAL_DOCUMENTATION.md](../TECHNICAL_DOCUMENTATION.md) for detailed methodology.
+
+## 📄 License
+
+This project is part of academic research for the WISA course.
+
+## 👥 Authors
+
+WISA Course - Scientific Framework Comparison Research Team
