@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import '../../core/theme/app_theme.dart';
 import '../cpu_test/cpu_test_screen.dart';
 import '../gpu_test/gpu_test_screen.dart';
@@ -19,6 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int? _startupTimeUs;
   bool _startupMeasured = false;
 
+  static const _startupChannel = MethodChannel('flutter_benchmark/startup');
+
   @override
   void initState() {
     super.initState();
@@ -26,30 +29,48 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _measureStartupTime() {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
       if (!_startupMeasured) {
         final int firstFrameTime = DateTime.now().microsecondsSinceEpoch;
-        final int startupTime = firstFrameTime - widget.mainStartTime;
+        final int dartOnlyStartup = firstFrameTime - widget.mainStartTime;
+
+        // Try to get elapsed time from native process start
+        int? nativeStartupTime;
+        try {
+          final result = await _startupChannel.invokeMethod(
+            'getElapsedStartupTime',
+          );
+          if (result != null) {
+            nativeStartupTime = (result as num).toInt();
+          }
+        } catch (e) {
+          // Native startup time not available, use Dart-only measurement
+        }
 
         setState(() {
-          _startupTimeUs = startupTime;
+          _startupTimeUs = nativeStartupTime ?? dartOnlyStartup;
           _startupMeasured = true;
         });
 
-        _logStartupTime(firstFrameTime, startupTime);
+        _logStartupTime(firstFrameTime, _startupTimeUs!, dartOnlyStartup);
       }
     });
   }
 
-  void _logStartupTime(int firstFrameTime, int startupTime) {
+  void _logStartupTime(
+    int firstFrameTime,
+    int totalStartup,
+    int dartOnlyStartup,
+  ) {
     debugPrint('═══════════════════════════════════════════════');
     debugPrint('FLUTTER BENCHMARK - STARTUP TIME MEASUREMENT');
     debugPrint('═══════════════════════════════════════════════');
-    debugPrint('Main() called at: ${widget.mainStartTime} μs');
     debugPrint('First frame at: $firstFrameTime μs');
-    debugPrint('Time to Interactive (TTI): $startupTime μs');
     debugPrint(
-      'Time to Interactive (TTI): ${(startupTime / 1000).toStringAsFixed(2)} ms',
+      'Dart-only startup (main→frame): $dartOnlyStartup μs (${(dartOnlyStartup / 1000).toStringAsFixed(2)} ms)',
+    );
+    debugPrint(
+      'Total startup (process→frame): $totalStartup μs (${(totalStartup / 1000).toStringAsFixed(2)} ms)',
     );
     debugPrint('═══════════════════════════════════════════════');
   }
