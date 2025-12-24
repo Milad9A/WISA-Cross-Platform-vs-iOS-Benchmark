@@ -69,6 +69,13 @@ Based on benchmark testing, the hypothesis was **partially confirmed**:
 | Execution Time | Microseconds (μs) | Wall-clock time for algorithm completion |
 | Validation | Boolean | Correctness check (78,498 primes expected) |
 
+**Threading Context**: The CPU benchmark is **intentionally single-threaded** and runs on the **main UI thread** to:
+
+- Compare compiler/VM performance (Dart AOT vs LLVM) directly
+- Avoid scheduler differences between platforms
+- Measure UI-blocking behavior (realistic for compute on main thread)
+- Ensure deterministic, reproducible results
+
 ### 2.2 GPU/Rendering Performance
 
 | Metric | Unit | Description |
@@ -88,11 +95,19 @@ Based on benchmark testing, the hypothesis was **partially confirmed**:
 | End Level | Percentage | Battery level after test |
 | Delta | Percentage points | Drain during 30s stress test |
 
-### 2.4 Startup Time
+### 2.4 Engine Initialization Time ("Startup Time")
 
 | Metric | Unit | Description |
 |--------|------|-------------|
-| Time to Interactive (TTI) | Milliseconds | Time from process start to first frame render |
+| Engine Init to First Frame | Milliseconds | Time from framework initialization (`didFinishLaunchingWithOptions` in Flutter, `StartupMetrics.init()` in iOS) to first frame rendered |
+
+**Important Clarifications**:
+
+- **Does NOT include**: OS process creation, dylib loading, or app launch from cold start
+- **Does include**: Framework initialization (Flutter engine or SwiftUI runtime), widget/view tree construction, layout, and first frame rasterization
+- **Measurement Point**: Starts when the app framework begins execution (after OS has loaded the process)
+- **More Accurate Name**: "Engine Initialization Time" or "Framework-to-Frame Time"
+- **Why ~27ms is fast**: This only measures framework overhead, not total app launch time from user tap
 
 ### 2.5 Memory Usage
 
@@ -114,10 +129,12 @@ Based on benchmark testing, the hypothesis was **partially confirmed**:
 
 | Component | Flutter App | iOS App |
 |-----------|-------------|---------|
-| Framework | Flutter 3.10+ | SwiftUI (iOS 17+) |
-| Language | Dart 3.0+ | Swift 5.9+ |
-| Rendering | Impeller (Metal) | Core Animation / Metal |
-| IDE | VS Code / Android Studio | Xcode 15.0+ |
+| **Framework** | Flutter 3.38.4 (stable) | SwiftUI (iOS 17.0+) |
+| **Language** | Dart 3.10.3 | Swift 6.2.3 |
+| **Rendering** | Impeller (Metal) | Core Animation / Metal |
+| **IDE** | VS Code / Android Studio | Xcode 26.2 |
+| **Build Version** | Engine a5cb96369e | Build 17C52 |
+| **Compiler** | Dart AOT | LLVM (swiftlang-6.2.3.3.21) |
 
 ### 3.3 Test Conditions
 
@@ -219,10 +236,15 @@ let executionTimeUs = Int(executionTime * 1_000_000)
 
 | Decision | Rationale |
 |----------|-----------|
-| Run on Main Thread | Measures UI thread blocking behavior |
-| No Isolate/GCD | Tests single-threaded performance |
-| Boolean Array | Identical memory pattern in both languages |
-| Post-delay Start | Allows UI to settle before blocking |
+| **Single-Threaded** | Compares Dart AOT vs LLVM compiler performance directly |
+| **Run on Main Thread** | Measures UI thread blocking behavior (realistic scenario) |
+| **No Isolate/GCD** | Eliminates scheduler/concurrency differences between platforms |
+| **Boolean Array** | Identical memory pattern and allocation strategy |
+| **Post-delay Start** | Allows UI to settle, ensures consistent thermal state |
+| **Multiple Iterations** | Statistical significance (mean, stddev, min, max) |
+
+**Why Single-Threaded?**  
+This benchmark intentionally avoids multi-threading to isolate **compiler/VM performance** from **scheduler efficiency**. It measures: "How fast can each platform execute the same algorithm on one core?" rather than "How well does each platform schedule work?"
 
 ---
 
@@ -494,17 +516,36 @@ let drain = batteryStart - batteryEnd
 
 ---
 
-## 8. Startup Time Measurement
+## 8. Engine Initialization Time Measurement
 
-### 8.1 Definition: Time to Interactive (TTI)
+### 8.1 Definition: Framework-to-Frame Time (Commonly Called "Startup Time")
 
-TTI measures the time from when the app initializes until the first frame is rendered and the UI is interactive.
+This metric measures the time from **framework initialization** to **first frame rendered**.
 
-**Important**: Both apps measure from the same starting point (app framework initialization) for an apples-to-apples comparison.
+**Critical Clarification - What Is NOT Measured**:
+
+- ❌ OS process creation and launch
+- ❌ Dynamic library (dylib) loading
+- ❌ App binary loading into memory
+- ❌ Code signing verification
+- ❌ Cold start from device home screen
+
+**What IS Measured**:
+
+- ✅ Framework initialization (Flutter engine or SwiftUI runtime)
+- ✅ App delegate/main struct initialization
+- ✅ Widget/view tree construction
+- ✅ Initial layout pass
+- ✅ First frame rasterization to screen
+
+**Why the measurement is ~27-67ms (not seconds)**:  
+Both apps start measuring **after** the OS has already launched the process. The measurement begins when the application framework (Flutter or SwiftUI) starts executing.
+
+**More Accurate Terminology**: "Engine Initialization Time" or "Framework-to-Frame Time"
 
 ### 8.2 Flutter Implementation
 
-Flutter measures startup time via a native `MethodChannel` that captures the elapsed time from `didFinishLaunchingWithOptions` to first frame:
+Flutter measures via a native `MethodChannel` that captures elapsed time from `didFinishLaunchingWithOptions` (earliest framework hook) to first frame:
 
 ```swift
 // ios/Runner/AppDelegate.swift
@@ -577,9 +618,15 @@ class StartupMetrics: ObservableObject {
 
 | Metric | Flutter | iOS Native | Difference |
 |--------|---------|------------|------------|
-| **TTI (App Init → First Frame)** | ~27 ms | ~67 ms | **Flutter ~2.5x faster** |
+| **Engine Init → First Frame** | ~27 ms | ~67 ms | **Flutter ~2.5x faster** |
 
-**Analysis**: Flutter's faster startup is attributed to:
+**Measurement Boundaries**:
+
+- **Start**: Framework initialization (`didFinishLaunchingWithOptions` for Flutter, `StartupMetrics.init()` for iOS)
+- **End**: First frame rendered and `onAppear`/`addPostFrameCallback` triggered
+- **Excludes**: OS process creation, dylib loading (adds ~100-300ms on cold launch)
+
+**Analysis**: Flutter's faster framework initialization is attributed to:
 
 1. **AOT Compilation**: Dart AOT produces optimized machine code ready to execute
 2. **Engine Pre-warming**: Flutter's Impeller engine initializes efficiently
@@ -818,20 +865,34 @@ Time to Interactive (TTI): XX.XX ms
 
 ## Appendix C: Benchmark Results Summary
 
-### Test Device
+### Test Environment
 
-- **Model**: iPhone 14
+- **Device**: iPhone 14
 - **iOS Version**: 17.x
 - **Build Mode**: Release (both apps)
+
+### Exact Software Versions
+
+| Component | Version | Details |
+|-----------|---------|---------|
+| **Flutter** | 3.38.4 (stable) | Channel: stable |
+| **Dart** | 3.10.3 | AOT Compiler |
+| **Flutter Engine** | a5cb96369e | Impeller (Metal) |
+| **Xcode** | 26.2 | Build 17C52 |
+| **Swift** | 6.2.3 | swiftlang-6.2.3.3.21 |
+| **LLVM** | clang-1700.6.3.2 | Target: arm64-apple-macosx26.0 |
 
 ### CPU Benchmark Results
 
 | Metric | Flutter | iOS Native | Difference |
 |--------|---------|------------|------------|
 | **Algorithm** | Sieve of Eratosthenes | Sieve of Eratosthenes | Identical |
+| **Threading** | Single-threaded (main thread) | Single-threaded (main thread) | Identical |
 | **Prime Limit** | 1,000,000 | 1,000,000 | Identical |
 | **Primes Found** | 78,498 ✓ | 78,498 ✓ | Validated |
 | **Execution Time** | ~27-30 ms | ~9 ms | **iOS ~3x faster** |
+
+**Threading Context**: Both implementations are intentionally **single-threaded** and run on the **main UI thread** to compare compiler performance (Dart AOT vs LLVM) directly, without introducing scheduler/concurrency variables.
 
 **Analysis**: The 3x performance difference is attributed to:
 
@@ -859,9 +920,16 @@ Time to Interactive (TTI): XX.XX ms
 
 | Metric | Flutter | iOS Native | Difference |
 |--------|---------|------------|------------|
-| **Time to Interactive (TTI)** | ~27 ms | ~67 ms | **Flutter ~2.5x faster** |
+| **Engine Init → First Frame** | ~27 ms | ~67 ms | **Flutter ~2.5x faster** |
 
-**Analysis**: Flutter's faster startup is attributed to:
+**Measurement Scope**:
+
+- ✅ **Included**: Framework initialization, widget/view tree construction, layout, first frame rasterization
+- ❌ **Excluded**: OS process creation, dylib loading, code signing (adds ~100-300ms)
+- **Start Point**: Framework begins execution (`didFinishLaunchingWithOptions` / `StartupMetrics.init()`)
+- **End Point**: First frame rendered to screen
+
+**Analysis**: Flutter's faster framework initialization is attributed to:
 
 1. **AOT Compilation**: Dart AOT produces optimized machine code ready to execute immediately
 2. **Efficient Engine Initialization**: Impeller engine starts quickly
