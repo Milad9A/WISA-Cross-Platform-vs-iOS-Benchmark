@@ -21,6 +21,32 @@ This benchmark suite provides an **apples-to-apples** performance comparison bet
 
 ---
 
+## 🖼️ Screenshots & Video Demo
+
+Below are visual examples of the apps and their benchmark tests:
+
+### Home Screen (iOS)
+
+<img src="./screenshots/home_ios.png" alt="iOS Home Screen" width="250"/>
+
+### Home Screen (Flutter)
+
+<img src="./screenshots/home_flutter.png" alt="Flutter Home Screen" width="250"/>
+
+### Demo Video (iOS)
+
+<video src="./screenshots/demo_ios.mp4" controls width="250">
+    Your browser does not support the video tag.
+</video>
+
+### Demo Video (Flutter)
+
+<video src="./screenshots/demo_flutter.mp4" controls width="250">
+    Your browser does not support the video tag.
+</video>
+
+---
+
 ## 🏗️ Project Structure
 
 ```
