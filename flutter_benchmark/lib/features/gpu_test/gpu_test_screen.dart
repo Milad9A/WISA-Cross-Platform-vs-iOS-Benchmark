@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import '../../core/constants/benchmark_config.dart';
 import '../../core/theme/app_theme.dart';
 import '../../services/battery_service.dart';
+import '../../services/memory_service.dart';
 import '../../widgets/metric_card.dart';
 import 'widgets/complex_list_item.dart';
 import 'widgets/results_panel.dart';
@@ -51,6 +52,11 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
   int? _batteryLevelStart;
   int? _batteryLevelEnd;
   String? _batteryDelta;
+
+  // Memory Metrics
+  double? _memoryStartMB;
+  double? _memoryEndMB;
+  double _memoryPeakMB = 0;
 
   // Timing
   int _elapsedSeconds = 0;
@@ -135,9 +141,11 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
       _actualFps = 0;
       _elapsedSeconds = 0;
       _batteryDelta = null;
+      _memoryPeakMB = 0;
     });
 
     _batteryLevelStart = await BatteryService.getBatteryLevel();
+    _memoryStartMB = await MemoryService.getMemoryUsageMB();
     _testStartTimeUs = DateTime.now().microsecondsSinceEpoch;
 
     _logTestStart();
@@ -165,6 +173,9 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
     debugPrint('Items: ${BenchmarkConfig.gpuTestItemCount}');
     debugPrint('Duration: ${BenchmarkConfig.scrollDurationSeconds} seconds');
     debugPrint('Battery at start: ${_batteryLevelStart ?? "N/A"}%');
+    debugPrint(
+      'Memory at start: ${_memoryStartMB?.toStringAsFixed(1) ?? "N/A"} MB',
+    );
     debugPrint('═══════════════════════════════════════════════');
   }
 
@@ -186,6 +197,12 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
     _testEndTimeUs = DateTime.now().microsecondsSinceEpoch;
 
     _batteryLevelEnd = await BatteryService.getBatteryLevel();
+    _memoryEndMB = await MemoryService.getMemoryUsageMB();
+    if (_memoryStartMB != null && _memoryEndMB != null) {
+      _memoryPeakMB = (_memoryPeakMB > _memoryEndMB!)
+          ? _memoryPeakMB
+          : _memoryEndMB!;
+    }
 
     if (_frameIntervals.isNotEmpty) {
       final int sum = _frameIntervals.reduce((a, b) => a + b);
@@ -267,6 +284,9 @@ class _GPUTestScreenState extends State<GPUTestScreen> {
               maxFrameTimeUs: _maxFrameInterval.toDouble(),
               actualFps: _actualFps,
               batteryDelta: _batteryDelta,
+              memoryStartMB: _memoryStartMB,
+              memoryEndMB: _memoryEndMB,
+              memoryPeakMB: _memoryPeakMB,
             ),
           _buildScrollableList(),
         ],

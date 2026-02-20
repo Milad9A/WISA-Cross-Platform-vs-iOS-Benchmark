@@ -6,6 +6,9 @@ class GPUTestResult {
   final int maxFrameTimeUs;
   final int? batteryStart;
   final int? batteryEnd;
+  final double? memoryStartMB;
+  final double? memoryEndMB;
+  final double? memoryPeakMB;
   final DateTime timestamp;
 
   const GPUTestResult({
@@ -15,6 +18,9 @@ class GPUTestResult {
     required this.maxFrameTimeUs,
     this.batteryStart,
     this.batteryEnd,
+    this.memoryStartMB,
+    this.memoryEndMB,
+    this.memoryPeakMB,
     required this.timestamp,
   });
 

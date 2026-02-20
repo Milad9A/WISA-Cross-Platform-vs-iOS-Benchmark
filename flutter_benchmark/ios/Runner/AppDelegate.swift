@@ -54,6 +54,35 @@ import UIKit
                 result(FlutterMethodNotImplemented)
             }
         }
+        
+        // Set up memory method channel
+        let memoryChannel = FlutterMethodChannel(
+            name: "flutter_benchmark/memory",
+            binaryMessenger: controller.binaryMessenger
+        )
+        
+        memoryChannel.setMethodCallHandler { (call: FlutterMethodCall, result: @escaping FlutterResult) in
+            if call.method == "getMemoryUsage" {
+                // Get current memory usage using task_info
+                var info = mach_task_basic_info()
+                var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
+                
+                let kerr = withUnsafeMutablePointer(to: &info) {
+                    $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) {
+                        task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+                    }
+                }
+                
+                if kerr == KERN_SUCCESS {
+                    // Return memory in bytes
+                    result(Int(info.resident_size))
+                } else {
+                    result(FlutterError(code: "UNAVAILABLE", message: "Could not get memory info", details: nil))
+                }
+            } else {
+                result(FlutterMethodNotImplemented)
+            }
+        }
 
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)

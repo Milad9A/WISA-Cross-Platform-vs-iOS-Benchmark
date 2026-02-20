@@ -10,6 +10,9 @@ class ResultsPanel extends StatelessWidget {
   final double maxFrameTimeUs;
   final double actualFps;
   final String? batteryDelta;
+  final double? memoryStartMB;
+  final double? memoryEndMB;
+  final double? memoryPeakMB;
 
   const ResultsPanel({
     super.key,
@@ -19,6 +22,9 @@ class ResultsPanel extends StatelessWidget {
     required this.maxFrameTimeUs,
     required this.actualFps,
     this.batteryDelta,
+    this.memoryStartMB,
+    this.memoryEndMB,
+    this.memoryPeakMB,
   });
 
   double get jankPercentage =>
@@ -39,6 +45,43 @@ class ResultsPanel extends StatelessWidget {
           _buildPerformanceMetrics(),
           const SizedBox(height: 8),
           _buildTimingMetrics(),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: MetricCard(
+                  label: 'Memory Start',
+                  value: memoryStartMB != null
+                      ? '${memoryStartMB!.toStringAsFixed(1)} MB'
+                      : 'N/A',
+                  icon: Icons.memory,
+                  color: Colors.blue,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: MetricCard(
+                  label: 'Memory End',
+                  value: memoryEndMB != null
+                      ? '${memoryEndMB!.toStringAsFixed(1)} MB'
+                      : 'N/A',
+                  icon: Icons.memory,
+                  color: Colors.green,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: MetricCard(
+                  label: 'Memory Peak',
+                  value: memoryPeakMB != null
+                      ? '${memoryPeakMB!.toStringAsFixed(1)} MB'
+                      : 'N/A',
+                  icon: Icons.trending_up,
+                  color: Colors.orange,
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 8),
           MetricCard(
             label: 'Battery Drain',

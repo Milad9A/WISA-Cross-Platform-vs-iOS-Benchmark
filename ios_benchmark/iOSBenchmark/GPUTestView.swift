@@ -118,6 +118,32 @@ class BatteryMonitor {
     }
 }
 
+// MARK: - Memory Monitor
+
+class MemoryMonitor {
+    /// Get current memory usage in bytes using task_info
+    func getCurrentMemoryUsage() -> UInt64 {
+        var info = mach_task_basic_info()
+        var count = mach_msg_type_number_t(MemoryLayout<mach_task_basic_info>.size) / 4
+        
+        let result = withUnsafeMutablePointer(to: &info) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: Int(count)) {
+                task_info(mach_task_self_, task_flavor_t(MACH_TASK_BASIC_INFO), $0, &count)
+            }
+        }
+        
+        if result == KERN_SUCCESS {
+            return info.resident_size
+        }
+        return 0
+    }
+    
+    /// Get memory usage in megabytes
+    func getCurrentMemoryMB() -> Double {
+        return Double(getCurrentMemoryUsage()) / (1024 * 1024)
+    }
+}
+
 // MARK: - GPU Test View
 
 struct GPUTestView: View {
@@ -132,6 +158,11 @@ struct GPUTestView: View {
     @State private var batteryLevelStart: Int?
     @State private var batteryLevelEnd: Int?
     @State private var batteryDelta: String?
+    
+    // Memory
+    @State private var memoryStart: Double = 0
+    @State private var memoryEnd: Double = 0
+    @State private var memoryPeak: Double = 0
 
     // Timer
     @State private var progressTimer: Timer?
@@ -139,6 +170,7 @@ struct GPUTestView: View {
     private let itemCount = 1000
     private let scrollDurationSeconds = 30
     private let batteryMonitor = BatteryMonitor()
+    private let memoryMonitor = MemoryMonitor()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -225,6 +257,10 @@ struct GPUTestView: View {
                             ? String(format: "%.1fms", displayLinkManager.averageFrameTime * 1000)
                             : "..."
                     )
+                    LiveMetric(
+                        label: "RAM",
+                        value: String(format: "%.0fMB", memoryMonitor.getCurrentMemoryMB())
+                    )
                 }
             }
         }
@@ -292,6 +328,28 @@ struct GPUTestView: View {
                 icon: "battery.25",
                 color: .yellow
             )
+            
+            // Memory section
+            HStack(spacing: 8) {
+                ResultCard(
+                    label: "Memory Start",
+                    value: String(format: "%.1f MB", memoryStart),
+                    icon: "memorychip",
+                    color: .cyan
+                )
+                ResultCard(
+                    label: "Peak Memory",
+                    value: String(format: "%.1f MB", memoryPeak),
+                    icon: "arrow.up.circle",
+                    color: .orange
+                )
+                ResultCard(
+                    label: "Memory End",
+                    value: String(format: "%.1f MB", memoryEnd),
+                    icon: "memorychip",
+                    color: .cyan
+                )
+            }
         }
         .padding()
         .background(Color.green.opacity(0.1))
@@ -312,9 +370,13 @@ struct GPUTestView: View {
         testCompleted = false
         elapsedSeconds = 0
         batteryDelta = nil
+        memoryPeak = 0
 
         // Get battery level before test
         batteryLevelStart = batteryMonitor.batteryLevel
+        
+        // Get memory before test
+        memoryStart = memoryMonitor.getCurrentMemoryMB()
 
         // Log start
         print("═══════════════════════════════════════════════")
@@ -323,14 +385,21 @@ struct GPUTestView: View {
         print("Items: \(itemCount)")
         print("Duration: \(scrollDurationSeconds) seconds")
         print("Battery at start: \(batteryLevelStart ?? -1)%")
+        print("Memory at start: \(String(format: "%.1f", memoryStart)) MB")
         print("═══════════════════════════════════════════════")
 
         // Start FPS measurement
         displayLinkManager.start()
 
-        // Start progress timer
+        // Start progress timer (also tracks peak memory)
         progressTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             elapsedSeconds += 1
+            
+            // Track peak memory
+            let currentMemory = memoryMonitor.getCurrentMemoryMB()
+            if currentMemory > memoryPeak {
+                memoryPeak = currentMemory
+            }
 
             if elapsedSeconds >= scrollDurationSeconds {
                 completeTest()
@@ -372,6 +441,12 @@ struct GPUTestView: View {
         progressTimer = nil
 
         batteryLevelEnd = batteryMonitor.batteryLevel
+        memoryEnd = memoryMonitor.getCurrentMemoryMB()
+        
+        // Final peak memory check
+        if memoryEnd > memoryPeak {
+            memoryPeak = memoryEnd
+        }
 
         // Calculate battery delta
         if let start = batteryLevelStart, let end = batteryLevelEnd, start >= 0, end >= 0 {
@@ -389,13 +464,16 @@ struct GPUTestView: View {
         print("iOS BENCHMARK - GPU TEST RESULTS")
         print("═══════════════════════════════════════════════")
         print("Total frames: \(displayLinkManager.totalFrameCount)")
-        print("Dropped frames (>16.67ms): \(displayLinkManager.droppedFrameCount)")
+        print("Dropped frames (>25ms): \(displayLinkManager.droppedFrameCount)")
         print(
-            "Average frame time: \(String(format: "%.2f", displayLinkManager.averageFrameTime * 1000)) ms"
+            "Average frame interval: \(String(format: "%.2f", displayLinkManager.averageFrameTime * 1000)) ms"
         )
         print(
-            "Max frame time: \(String(format: "%.2f", displayLinkManager.maxFrameTime * 1000)) ms")
-        print("Estimated FPS: \(String(format: "%.1f", displayLinkManager.estimatedFPS))")
+            "Max frame interval: \(String(format: "%.2f", displayLinkManager.maxFrameTime * 1000)) ms")
+        print("Actual FPS: \(String(format: "%.1f", displayLinkManager.estimatedFPS))")
+        print("Memory at start: \(String(format: "%.1f", memoryStart)) MB")
+        print("Memory at end: \(String(format: "%.1f", memoryEnd)) MB")
+        print("Peak memory: \(String(format: "%.1f", memoryPeak)) MB")
         print("Battery at end: \(batteryLevelEnd ?? -1)%")
         print("Battery drain: \(batteryDelta ?? "N/A")")
         print("═══════════════════════════════════════════════")
