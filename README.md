@@ -44,11 +44,23 @@ Below are visual examples of the apps and their benchmark tests:
 
 ### Demo Video (iOS)
 
-[Watch iOS Demo Video](./screenshots/demo_ios.mp4)
+<!-- markdownlint-disable-next-line MD033 -->
+<video width="300" controls>
+  <!-- markdownlint-disable MD033 -->
+  <source src="./screenshots/demo_ios.mp4" type="video/mp4">
+  <!-- markdownlint-enable MD033 -->
+  Your browser does not support the video tag.
+</video>
 
 ### Demo Video (Flutter)
 
-[Watch Flutter Demo Video](./screenshots/demo_flutter.mp4)
+<!-- markdownlint-disable-next-line MD033 -->
+<video width="300" controls>
+  <!-- markdownlint-disable MD033 -->
+  <source src="./screenshots/demo_flutter.mp4" type="video/mp4">
+  <!-- markdownlint-enable MD033 -->
+  Your browser does not support the video tag.
+</video>
 
 ---
 
