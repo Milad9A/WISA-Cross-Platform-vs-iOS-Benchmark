@@ -9,6 +9,13 @@ This benchmark suite provides an **apples-to-apples** performance comparison bet
 
 ---
 
+## 📜 Documentation
+
+- **[TECHNICAL.md](./TECHNICAL.md)** - Comprehensive technical details about benchmark methodology, implementation, measurement approaches, and results analysis
+- **[Academic Paper](./documentation/paper.tex)** - Full scientific documentation in LaTeX
+
+---
+
 ## 📊 Metrics Measured
 
 | Metric | Description | Implementation |
@@ -18,13 +25,6 @@ This benchmark suite provides an **apples-to-apples** performance comparison bet
 | **Memory (RAM)** | Memory allocator stress | Complex UI elements with gradients/shadows |
 | **Battery Impact** | Energy consumption | Battery level delta during GPU test |
 | **App Startup Time** | Time to Interactive (TTI) | main() → first frame rendered |
-
----
-
-## 📜 Documentation
-
-- **[TECHNICAL.md](./TECHNICAL.md)** - Comprehensive technical details about benchmark methodology, implementation, measurement approaches, and results analysis
-- **[Academic Paper](./documentation/paper.tex)** - Full scientific documentation in LaTeX
 
 ---
 
@@ -44,23 +44,11 @@ Below are visual examples of the apps and their benchmark tests:
 
 ### Demo Video (iOS)
 
-<!-- markdownlint-disable-next-line MD033 -->
-<video width="300" controls>
-  <!-- markdownlint-disable MD033 -->
-  <source src="./screenshots/demo_ios.mp4" type="video/mp4">
-  <!-- markdownlint-enable MD033 -->
-  Your browser does not support the video tag.
-</video>
+https://github.com/user-attachments/assets/c033d096-f238-4589-8359-758b44818096
 
 ### Demo Video (Flutter)
 
-<!-- markdownlint-disable-next-line MD033 -->
-<video width="300" controls>
-  <!-- markdownlint-disable MD033 -->
-  <source src="./screenshots/demo_flutter.mp4" type="video/mp4">
-  <!-- markdownlint-enable MD033 -->
-  Your browser does not support the video tag.
-</video>
+https://github.com/user-attachments/assets/c06b7e6b-b978-41fb-bf92-5b504a8ada06
 
 ---
 
