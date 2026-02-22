@@ -125,6 +125,7 @@ INPUT /usr/local/texlive/2025basic/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 INPUT /usr/local/texlive/2025basic/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 INPUT /usr/local/texlive/2025basic/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 INPUT /usr/local/texlive/2025basic/texmf-dist/fonts/tfm/adobe/times/ptmr8c.tfm
+INPUT /usr/local/texlive/2025basic/texmf-dist/fonts/vf/adobe/times/ptmr8c.vf
 INPUT ./figures/media/image4.png
 INPUT ./figures/media/image4.png
 INPUT ./figures/media/image4.png
@@ -132,7 +133,6 @@ INPUT ./figures/media/image4.png
 INPUT /usr/local/texlive/2025basic/texmf-dist/fonts/tfm/public/cm/cmr8.tfm
 INPUT /usr/local/texlive/2025basic/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm
 INPUT /usr/local/texlive/2025basic/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm
-INPUT /usr/local/texlive/2025basic/texmf-dist/fonts/vf/adobe/times/ptmr8c.vf
 INPUT ./figures/media/image3.png
 INPUT ./figures/media/image3.png
 INPUT ./figures/media/image3.png
