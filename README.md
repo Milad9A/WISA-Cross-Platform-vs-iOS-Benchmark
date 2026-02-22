@@ -34,11 +34,13 @@ Below are visual examples of the apps and their benchmark tests:
 
 ### Home Screen (iOS)
 
-![iOS Home Screen](./screenshots/home_ios.png)
+<!-- markdownlint-disable-next-line MD033 -->
+<img src="./screenshots/home_ios.png" alt="iOS Home Screen" width="300"/>
 
 ### Home Screen (Flutter)
 
-![Flutter Home Screen](./screenshots/home_flutter.png)
+<!-- markdownlint-disable-next-line MD033 -->
+<img src="./screenshots/home_flutter.png" alt="Flutter Home Screen" width="300"/>
 
 ### Demo Video (iOS)
 
