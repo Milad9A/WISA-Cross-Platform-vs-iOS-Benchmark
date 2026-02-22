@@ -18,11 +18,9 @@
 
 \title{Comparative Analysis of Native vs. Cross-Platform Mobile Development: An Empirical Performance Study on iOS}
 
-\author{\textbf{Milad Awad} \textit{Hochschule Bremen \, mawad@stud.hs-bremen.de}%
+\author{\textbf{Milad Awad} \textit{Hochschule Bremen - mawad@stud.hs-bremen.de}%
 	\vspace{-0.5cm}
-
 }
-
 
 \maketitle
 
@@ -33,11 +31,11 @@
 	presents a comparative analysis of native iOS (Swift) and Flutter development, focusing on system resource
 	efficiency on physical iPhone 14 hardware. A standardized benchmark measured CPU efficiency, GPU rendering
 	stability, and Engine Initialization Time. The results indicate that while Native iOS outperforms Flutter
-	in single-threaded CPU tasks by approximately 4.5x, Flutter achieves equivalent UI rendering performance
-	(60 FPS) and demonstrates a significantly faster engine initialization time (about 2.4x). However, this
-	performance parity comes with a resource trade-off: the Flutter implementation exhibited a 3x higher idle
-	memory footprint and a 5x larger binary size compared to Native iOS. These findings suggest that while the
-	"performance gap" has narrowed for standard business applications, Native development remains the superior
+	in single-threaded CPU tasks by approximately $4.5\times$, Flutter achieves equivalent UI rendering performance
+	(60~FPS) and demonstrates a significantly faster engine initialization time (approximately $2.4\times$). However, this
+	performance parity comes with a resource trade-off: the Flutter implementation exhibited a $3\times$ higher idle
+	memory footprint and a $5\times$ larger binary size compared to Native iOS. These findings suggest that while the
+	``performance gap'' has narrowed for standard business applications, Native development remains the superior
 	choice for compute-intensive or size-constrained environments (e.g., App Clips).
 \end{abstract}
 
@@ -51,10 +49,10 @@
 \subsection{Motivation}
 The mobile app market continues to grow exponentially, placing immense pressure on companies to deliver
 high-quality applications for both iOS and Android simultaneously. For startups and enterprises alike,
-this creates a "Developer\textquotesingle s Dilemma": should they invest in two separate native
+this creates a ``Developer's Dilemma'': should they invest in two separate native
 development teams to ensure maximum performance and user experience, or utilize cross-platform frameworks
 to reduce time-to-market and development costs? Modern cross-platform frameworks, particularly
-Google\textquotesingle s Flutter and Meta\textquotesingle s React Native, promise "write once, run anywhere"
+Google's Flutter and Meta's React Native, promise ``write once, run anywhere''
 capabilities. However, skepticism remains regarding the performance overhead introduced by the abstraction
 layers these frameworks use.
 
@@ -84,13 +82,13 @@ This is operationalized through three key metrics:
 \noindent\rule{\linewidth}{0.4pt}
 \section{Related Work}
 \subsection{Evolution of Cross-Platform Frameworks}
-The landscape of mobile development has shifted from early "hybrid" approaches to modern compiled
+The landscape of mobile development has shifted from early ``hybrid'' approaches to modern compiled
 frameworks. Majchrzak et al.~\cite{majchrzak2017} analyzed the initial generation of cross-platform tools,
 noting that while they offered promise for code reusability, they often struggled to access native device
 features and maintain a consistent user experience. Bi\o rn-Hansen et al.~\cite{bjornhansen2020} expanded
 on this by evaluating the presence and performance of varying development approaches. Their work
 highlights that while cross-platform technologies have improved, distinct trade-offs remain regarding
-application responsiveness and the "look and feel" compared to purely native solutions.
+application responsiveness and the ``look and feel'' compared to purely native solutions.
 
 \subsection{Performance Benchmarking}
 Direct performance comparisons have yielded mixed results. You and Hu~\cite{you2021} conducted a
@@ -111,7 +109,7 @@ from similar resource inefficiencies on iOS.
 \section{Methodology}
 \subsection{Experimental Design}
 This study employs a quantitative, experimental approach. To ensure internal validity, a standardized
-"Benchmark App" was developed in two variants:
+``Benchmark App'' was developed in two variants:
 
 \begin{enumerate}
 	\item Native iOS: Written in Swift (v6.2.3) using SwiftUI.
@@ -123,7 +121,7 @@ This study employs a quantitative, experimental approach. To ensure internal val
 The benchmark application consists of distinct modules designed to stress specific system resources.
 
 \subsubsection{CPU Stress Test (Sieve of Eratosthenes)}
-To measure raw computational power, the Sieve of Eratosthenes algorithm (n=1M) was implemented.
+To measure raw computational power, the Sieve of Eratosthenes algorithm ($n = 10^6$) was implemented.
 
 \begin{itemize}
 	\item Threading Context: The algorithm is intentionally executed on the Main UI Thread in a
@@ -138,12 +136,12 @@ item includes high-resolution images, gradient overlays, box shadows, and clippi
 
 \begin{itemize}
 	\item Measurement: An automated linear scroll is performed for 30 seconds.
-	\item Jank Definition: Any frame taking longer than 25 ms (about 1.5x the 16.67 ms target) is flagged as
-	      "Jank" to distinguish actual dropped frames from minor VSync variances.
+	\item Jank Definition: Any frame taking longer than 25~ms (approximately $1.5\times$ the 16.67~ms target) is flagged as
+	      ``Jank'' to distinguish actual dropped frames from minor VSync variances.
 \end{itemize}
 
 \subsubsection{Engine Initialization Time (Framework-to-Frame)}
-This metric measures the interval from the framework\textquotesingle s initialization hook
+This metric measures the interval from the framework's initialization hook
 (didFinishLaunching or StartupMetrics.init) to the first rasterized frame.
 
 \begin{itemize}
@@ -169,34 +167,34 @@ applications (Native and Flutter) has been made open-source. The repository is a
 
 \noindent\rule{\linewidth}{0.4pt}
 \section{Results}
-To ensure statistical rigor, each benchmark was executed n=30 times on a physical iPhone 14 running iOS
+To ensure statistical rigor, each benchmark was executed $n = 30$ times on a physical iPhone 14 running iOS
 26. The results present a distinct trade-off profile between the two architectures.
 
 \subsection{CPU Efficiency (Single-Threaded)}
-The Prime Sieve algorithm (n=1M) revealed a significant performance gap in raw computation on the main
+The Prime Sieve algorithm ($n = 10^6$) revealed a significant performance gap in raw computation on the main
 thread.
 
 \begin{itemize}
-	\item Native iOS (Swift): Average execution time of 7.32 ms ($\sigma=0.43$).
-	\item Flutter (Dart): Average execution time of 33.03 ms ($\sigma=0.71$).
+	\item Native iOS (Swift): Average execution time of 7.32~ms ($\sigma = 0.43$).
+	\item Flutter (Dart): Average execution time of 33.03~ms ($\sigma = 0.71$).
 \end{itemize}
 
 Analysis: As shown in Fig.~\ref{fig:cpu}, the Native Swift implementation outperformed Flutter by a
-factor of about 4.5x. This confirms that for pure algorithmic tasks on a single thread, LLVM\textquotesingle s
+factor of approximately $4.5\times$. This confirms that for pure algorithmic tasks on a single thread, LLVM's
 aggressive optimizations (such as auto-vectorization and stack allocation) provide a substantial
-advantage over the Dart AOT runtime. However, Flutter\textquotesingle s performance remained highly stable
-($\sigma<1$ ms), indicating that the Dart VM handles main-thread computation predictably without erratic
+advantage over the Dart AOT runtime. However, Flutter's performance remained highly stable
+($\sigma < 1$~ms), indicating that the Dart VM handles main-thread computation predictably without erratic
 garbage collection spikes.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{media/image4.png}
-	\caption{Average execution time for Sieve of Eratosthenes (n=1M). Native Swift is about 4.5x faster than Dart.}
+	\caption{Average execution time for Sieve of Eratosthenes ($n = 10^6$). Native Swift is approximately $4.5\times$ faster than Dart.}
 	\label{fig:cpu}
 \end{figure}
 
 \subsection{GPU Rendering and Stability}
-In the "Complex List" scrolling test (1,000 items with shadows, gradients, and masking), both frameworks
+In the ``Complex List'' scrolling test (1,000 items with shadows, gradients, and masking), both frameworks
 achieved the 60 Hz target, but with different stability characteristics.
 
 \begin{itemize}
@@ -206,9 +204,9 @@ achieved the 60 Hz target, but with different stability characteristics.
 
 Analysis: Contrary to historical assumptions, the cross-platform solution (Flutter) slightly
 outperformed the native solution in frame stability (Fig.~\ref{fig:gpu}). This is attributed to
-Flutter\textquotesingle s Impeller rendering engine, which pre-compiles shaders to avoid runtime hitching.
+Flutter's Impeller rendering engine, which pre-compiles shaders to avoid runtime hitching.
 While SwiftUI maintained a high average FPS, it exhibited minor volatility (max frame time
-about 77 ms) likely due to main-thread layout passes during rapid scrolling.
+of approximately 77~ms) likely due to main-thread layout passes during rapid scrolling.
 
 \begin{figure}[H]
 	\centering
@@ -218,31 +216,31 @@ about 77 ms) likely due to main-thread layout passes during rapid scrolling.
 \end{figure}
 
 \subsection{Engine Initialization Time}
-The "Framework-to-Frame" interval measured the time required to initialize the runtime and rasterize the
+The ``Framework-to-Frame'' interval measured the time required to initialize the runtime and rasterize the
 first frame.
 
 \begin{itemize}
-	\item Flutter: Average of 27.85 ms (Range: 26--29 ms).
-	\item Native iOS: Average of 65.95 ms (Range: 62--67 ms).
+	\item Flutter: Average of 27.85~ms (Range: 26--29~ms).
+	\item Native iOS: Average of 65.95~ms (Range: 62--67~ms).
 \end{itemize}
 
-Analysis: Flutter demonstrated an initialization speed about 2.4x faster than Native iOS
+Analysis: Flutter demonstrated an initialization speed approximately $2.4\times$ faster than Native iOS
 (Fig.~\ref{fig:init}). This result indicates that the pre-warmed Flutter engine can construct its initial
 widget tree more rapidly than the SwiftUI runtime can initialize its declarative view hierarchy.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{media/image2.png}
-	\caption{Engine Initialization Time (Framework-to-Frame). Flutter initializes about 2.4x faster.}
+	\caption{Engine Initialization Time (Framework-to-Frame). Flutter initializes approximately $2.4\times$ faster.}
 	\label{fig:init}
 \end{figure}
 
 \subsection{Resource Footprint}
 \begin{itemize}
-	\item Memory (RAM): Native iOS was significantly more efficient, consuming about 18 MB at idle compared
-	      to Flutter\textquotesingle s about 54 MB. The additional 36 MB overhead in Flutter represents the cost of
+	\item Memory (RAM): Native iOS was significantly more efficient, consuming approximately 18~MB at idle compared
+	      to Flutter's approximately 54~MB. The additional 36~MB overhead in Flutter represents the cost of
 	      the Dart VM isolate and the rendering engine.
-	\item Binary Size: The compiled application size (Release .ipa) was 2.8 MB for Native iOS versus 14.3 MB
+	\item Binary Size: The compiled application size (Release .ipa) was 2.8~MB for Native iOS versus 14.3~MB
 	      for Flutter, reflecting the fixed cost of embedding the Flutter engine.
 \end{itemize}
 
@@ -256,7 +254,7 @@ widget tree more rapidly than the SwiftUI runtime can initialize its declarative
 \noindent\rule{\linewidth}{0.4pt}
 \section{Discussion}
 \subsection{Interpretation of Results}
-The data indicates that the "performance gap" is no longer a binary issue but depends heavily on the
+The data indicates that the ``performance gap'' is no longer a binary issue but depends heavily on the
 specific workload:
 
 \begin{enumerate}
@@ -281,13 +279,13 @@ specific workload:
 \section{Conclusion}
 This paper presented a comparative analysis of Native iOS and Flutter development on physical iPhone 14
 hardware. Through a standardized benchmark, we demonstrated that Native Swift remains the superior choice
-for raw CPU computation, outperforming Flutter by approximately 4.5x in single-threaded tasks. However,
+for raw CPU computation, outperforming Flutter by approximately $4.5\times$ in single-threaded tasks. However,
 Flutter has achieved parity in UI rendering via the Impeller engine and demonstrates superior performance
-in engine initialization time, launching about 2.4x faster than the Native SwiftUI equivalent.
+in engine initialization time, launching approximately $2.4\times$ faster than the Native SwiftUI equivalent.
 
 While the performance gap has narrowed for standard business applications, the resource footprint remains
-a critical differentiator. With a compiled binary size of 14.3 MB compared to Native iOS\textquotesingle s
-2.8 MB, Flutter introduces a baseline overhead that, while negligible for standard app store
+a critical differentiator. With a compiled binary size of 14.3~MB compared to Native iOS's
+2.8~MB, Flutter introduces a baseline overhead that, while negligible for standard app store
 distributions, is prohibitive for size-constrained environments such as App Clips or instant extensions.
 
 For 2026, the data suggests that unless an application is strictly compute-bound or requires the
@@ -303,6 +301,8 @@ cross-platform development the optimal default choice for modern mobile architec
 \section{Software Configuration}
 
 \begin{table}[h!]
+	\caption{Software configuration used for benchmarking.}
+	\label{tab:config}
 	\centering
 	\begin{tabular}{lll}
 		\toprule
