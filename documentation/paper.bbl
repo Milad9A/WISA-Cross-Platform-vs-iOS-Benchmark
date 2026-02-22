@@ -7,8 +7,7 @@
 \providecommand{\BIBentrySTDinterwordspacing}{\spaceskip=0pt\relax}
 \providecommand{\BIBentryALTinterwordstretchfactor}{4}
 \providecommand{\BIBentryALTinterwordspacing}{\spaceskip=\fontdimen2\font plus
-\BIBentryALTinterwordstretchfactor\fontdimen3\font minus
-  \fontdimen4\font\relax}
+\BIBentryALTinterwordstretchfactor\fontdimen3\font minus \fontdimen4\font\relax}
 \providecommand{\BIBforeignlanguage}[2]{{%
 \expandafter\ifx\csname l@#1\endcsname\relax
 \typeout{** WARNING: IEEEtran.bst: No hyphenation pattern has been}%
@@ -22,27 +21,15 @@
 \BIBdecl
 
 \bibitem{majchrzak2017}
-T.~A. Majchrzak, A.~Bi{\o}rn-Hansen, and T.-M. Gr{\o}nli, ``Comprehensive
-  analysis of innovative cross-platform app development frameworks,'' in
-  \emph{Proceedings of the 50th Hawaii International Conference on System
-  Sciences}, 2017.
+T.~A. Majchrzak, A.~Bi{\o}rn-Hansen, and T.-M. Gr{\o}nli, ``Comprehensive analysis of innovative cross-platform app development frameworks,'' in \emph{Proceedings of the 50th Hawaii International Conference on System Sciences}, 2017.
 
 \bibitem{bjornhansen2020}
-A.~Bi{\o}rn-Hansen, T.-M. Gr{\o}nli, and G.~Ghinea, ``Presence and performance
-  of mobile development approaches,'' \emph{Empirical Software Engineering},
-  vol.~25, pp. 2997--3040, 2020.
+A.~Bi{\o}rn-Hansen, T.-M. Gr{\o}nli, and G.~Ghinea, ``Presence and performance of mobile development approaches,'' \emph{Empirical Software Engineering}, vol.~25, pp. 2997--3040, 2020.
 
 \bibitem{you2021}
-D.~You and M.~Hu, ``A comparative study of cross-platform mobile application
-  development,'' in \emph{Proceedings of the 11th Annual Conference of
-  Computing and Information Technology Research and Education New Zealand
-  (CITRENZ)}, 2021.
+D.~You and M.~Hu, ``A comparative study of cross-platform mobile application development,'' in \emph{Proceedings of the 11th Annual Conference of Computing and Information Technology Research and Education New Zealand (CITRENZ)}, 2021.
 
 \bibitem{horn2023}
-R.~Horn, A.~Lahnaoui, E.~Reinoso, S.~Peng, V.~Isakov, T.~Islam, and
-  I.~Malavolta, ``Native vs web apps: Comparing the energy consumption and
-  performance of android apps and their web counterparts,'' in
-  \emph{Proceedings of the 8th International Conference on Mobile Software
-  Engineering and Systems (MOBILESoft '23)}, 2023.
+R.~Horn, A.~Lahnaoui, E.~Reinoso, S.~Peng, V.~Isakov, T.~Islam, and I.~Malavolta, ``Native vs web apps: Comparing the energy consumption and performance of android apps and their web counterparts,'' in \emph{Proceedings of the 8th International Conference on Mobile Software Engineering and Systems (MOBILESoft '23)}, 2023.
 
 \end{thebibliography}

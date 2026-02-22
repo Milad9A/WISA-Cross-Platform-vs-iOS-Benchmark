@@ -10,20 +10,19 @@
 \usepackage{url}
 \usepackage{textcomp}
 \usepackage{longtable,booktabs,array,calc}
+\usepackage{float}
 
-% Correct bad hyphenation here
 \hyphenation{op-tical net-works semi-conduc-tor}
 
 \begin{document}
 
 \title{Comparative Analysis of Native vs. Cross-Platform Mobile Development: An Empirical Performance Study on iOS}
 
-\author{Milad~Awad% <-this % stops a space
-	\thanks{Hochschule Bremen, mawad@stud.hs-bremen.de. Manuscript received February 20, 2026; revised TBD.}}
+\author{\textbf{Milad Awad} \textit{Hochschule Bremen \, mawad@stud.hs-bremen.de}%
+	\vspace{-0.5cm}
 
-% The paper headers
-%\markboth{Journal Name,~Vol.~X, No.~X, Month~Year}%
-%{Awad \MakeLowercase{\textit{et al.}}: Comparative Analysis of Native vs. Cross-Platform Mobile Development}
+}
+
 
 \maketitle
 
@@ -47,6 +46,7 @@
 	rendering, Impeller
 \end{IEEEkeywords}
 
+\noindent\rule{\linewidth}{0.4pt}
 \section{Introduction}
 \subsection{Motivation}
 The mobile app market continues to grow exponentially, placing immense pressure on companies to deliver
@@ -81,6 +81,7 @@ This is operationalized through three key metrics:
 	      runtime environment.
 \end{enumerate}
 
+\noindent\rule{\linewidth}{0.4pt}
 \section{Related Work}
 \subsection{Evolution of Cross-Platform Frameworks}
 The landscape of mobile development has shifted from early "hybrid" approaches to modern compiled
@@ -106,6 +107,7 @@ struggle to match the CPU performance of native code. This paper extends that in
 whether Flutter, which compiles to native machine code rather than relying on web technologies, suffers
 from similar resource inefficiencies on iOS.
 
+\noindent\rule{\linewidth}{0.4pt}
 \section{Methodology}
 \subsection{Experimental Design}
 This study employs a quantitative, experimental approach. To ensure internal validity, a standardized
@@ -165,6 +167,7 @@ To foster transparency and independent verification, the complete source code fo
 applications (Native and Flutter) has been made open-source. The repository is available at:
 \url{https://github.com/Milad9A/WISA-Cross-Platform-vs-iOS-Benchmark}
 
+\noindent\rule{\linewidth}{0.4pt}
 \section{Results}
 To ensure statistical rigor, each benchmark was executed n=30 times on a physical iPhone 14 running iOS
 26. The results present a distinct trade-off profile between the two architectures.
@@ -185,7 +188,7 @@ advantage over the Dart AOT runtime. However, Flutter\textquotesingle s performa
 ($\sigma<1$ ms), indicating that the Dart VM handles main-thread computation predictably without erratic
 garbage collection spikes.
 
-\begin{figure}[!t]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{media/image4.png}
 	\caption{Average execution time for Sieve of Eratosthenes (n=1M). Native Swift is about 4.5x faster than Dart.}
@@ -207,7 +210,7 @@ Flutter\textquotesingle s Impeller rendering engine, which pre-compiles shaders 
 While SwiftUI maintained a high average FPS, it exhibited minor volatility (max frame time
 about 77 ms) likely due to main-thread layout passes during rapid scrolling.
 
-\begin{figure}[!t]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{media/image3.png}
 	\caption{Rendering stability during complex list scrolling. Flutter (Impeller) achieved 0\% Jank.}
@@ -227,7 +230,7 @@ Analysis: Flutter demonstrated an initialization speed about 2.4x faster than Na
 (Fig.~\ref{fig:init}). This result indicates that the pre-warmed Flutter engine can construct its initial
 widget tree more rapidly than the SwiftUI runtime can initialize its declarative view hierarchy.
 
-\begin{figure}[!t]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{media/image2.png}
 	\caption{Engine Initialization Time (Framework-to-Frame). Flutter initializes about 2.4x faster.}
@@ -243,13 +246,14 @@ widget tree more rapidly than the SwiftUI runtime can initialize its declarative
 	      for Flutter, reflecting the fixed cost of embedding the Flutter engine.
 \end{itemize}
 
-\begin{figure}[!t]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{media/image1.png}
 	\caption{Baseline memory footprint (Idle). Native iOS requires significantly less RAM.}
 	\label{fig:memory}
 \end{figure}
 
+\noindent\rule{\linewidth}{0.4pt}
 \section{Discussion}
 \subsection{Interpretation of Results}
 The data indicates that the "performance gap" is no longer a binary issue but depends heavily on the
@@ -273,6 +277,7 @@ specific workload:
 	      (e.g., App Clips or background extensions).
 \end{itemize}
 
+\noindent\rule{\linewidth}{0.4pt}
 \section{Conclusion}
 This paper presented a comparative analysis of Native iOS and Flutter development on physical iPhone 14
 hardware. Through a standardized benchmark, we demonstrated that Native Swift remains the superior choice
@@ -290,10 +295,14 @@ ultra-lightweight footprint of an App Clip, the performance overhead of Flutter 
 end-user. Consequently, the development velocity and cost benefits of a single codebase make
 cross-platform development the optimal default choice for modern mobile architecture.
 
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+\noindent\rule{\linewidth}{0.4pt}
 \appendices
 \section{Software Configuration}
 
-\begin{table*}[!t]
+\begin{table}[h!]
 	\centering
 	\begin{tabular}{lll}
 		\toprule
@@ -307,9 +316,6 @@ cross-platform development the optimal default choice for modern mobile architec
 		\textbf{Swift}     & 6.2.3            & swiftlang-6.2.3.3.21    \\
 		\bottomrule
 	\end{tabular}
-\end{table*}
-
-\bibliographystyle{IEEEtran}
-\bibliography{refs}
+\end{table}
 
 \end{document}
