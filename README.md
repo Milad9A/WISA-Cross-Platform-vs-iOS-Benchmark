@@ -30,25 +30,26 @@ This benchmark suite provides an **apples-to-apples** performance comparison bet
 
 ## 🖼️ Screenshots & Video Demo
 
-Below are visual examples of the apps and their benchmark tests:
+Below are screenshots and video demos of the apps and their benchmark tests:
 
-### Home Screen (iOS)
-
-<!-- markdownlint-disable-next-line MD033 -->
-<img src="./screenshots/home_ios.png" alt="iOS Home Screen" width="300"/>
-
-### Home Screen (Flutter)
-
-<!-- markdownlint-disable-next-line MD033 -->
-<img src="./screenshots/home_flutter.png" alt="Flutter Home Screen" width="300"/>
-
-### Demo Video (iOS)
-
-https://github.com/user-attachments/assets/c033d096-f238-4589-8359-758b44818096
-
-### Demo Video (Flutter)
-
-https://github.com/user-attachments/assets/c06b7e6b-b978-41fb-bf92-5b504a8ada06
+<!-- markdownlint-disable MD033 -->
+<table>
+  <tr>
+    <th colspan="2">iOS App</th>
+  </tr>
+  <tr>
+    <td align="center"><img src="./screenshots/home_ios.png" alt="iOS Home Screen" width="250"/></td>
+    <td align="center"><video src="https://github.com/user-attachments/assets/c033d096-f238-4589-8359-758b44818096" controls width="250"></video></td>
+  </tr>
+  <tr>
+    <th colspan="2">Flutter App</th>
+  </tr>
+  <tr>
+    <td align="center"><img src="./screenshots/home_flutter.png" alt="Flutter Home Screen" width="250"/></td>
+    <td align="center"><video src="https://github.com/user-attachments/assets/c06b7e6b-b978-41fb-bf92-5b504a8ada06" controls width="250"></video></td>
+  </tr>
+</table>
+<!-- markdownlint-enable MD033 -->
 
 ---
 
