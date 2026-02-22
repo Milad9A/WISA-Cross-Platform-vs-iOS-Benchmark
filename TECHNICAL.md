@@ -15,7 +15,7 @@ This document provides comprehensive technical details about the benchmark metho
 5. [GPU/Rendering Benchmark Implementation](#5-gpurendering-benchmark-implementation)
 6. [FPS Measurement Methodology](#6-fps-measurement-methodology)
 7. [Battery Consumption Measurement](#7-battery-consumption-measurement)
-8. [Startup Time Measurement](#8-startup-time-measurement)
+8. [Engine Initialization Time Measurement](#8-engine-initialization-time-measurement)
 9. [Memory Profiling](#9-memory-profiling)
 10. [Data Collection & Analysis](#10-data-collection--analysis)
 11. [Controlling Variables](#11-controlling-variables)
@@ -45,7 +45,7 @@ However, Flutter's Impeller rendering engine (introduced in Flutter 3.10+) claim
 Based on benchmark testing, the hypothesis was **partially confirmed**:
 
 | Benchmark Type | Result | Explanation |
-|----------------|--------|-------------|
+| --- | --- | --- |
 | **Startup Time** | Flutter ~2.5x faster | AOT compilation + efficient engine init |
 | **CPU Computation** | iOS ~3x faster | LLVM native ARM64 vs Dart AOT |
 | **GPU/UI Rendering** | Equivalent | Both use Metal for rendering |
@@ -65,7 +65,7 @@ Based on benchmark testing, the hypothesis was **partially confirmed**:
 ### 2.1 CPU Efficiency
 
 | Metric | Unit | Description |
-|--------|------|-------------|
+| --- | --- | --- |
 | Execution Time | Microseconds (μs) | Wall-clock time for algorithm completion |
 | Validation | Boolean | Correctness check (78,498 primes expected) |
 
@@ -79,7 +79,7 @@ Based on benchmark testing, the hypothesis was **partially confirmed**:
 ### 2.2 GPU/Rendering Performance
 
 | Metric | Unit | Description |
-|--------|------|-------------|
+| --- | --- | --- |
 | Total Frames | Count | Frames rendered during 30s test |
 | Dropped Frames | Count | Frames exceeding 16.67ms threshold |
 | Jank Rate | Percentage | (Dropped / Total) × 100 |
@@ -90,7 +90,7 @@ Based on benchmark testing, the hypothesis was **partially confirmed**:
 ### 2.3 Battery Consumption
 
 | Metric | Unit | Description |
-|--------|------|-------------|
+| --- | --- | --- |
 | Start Level | Percentage | Battery level before test |
 | End Level | Percentage | Battery level after test |
 | Delta | Percentage points | Drain during 30s stress test |
@@ -98,7 +98,7 @@ Based on benchmark testing, the hypothesis was **partially confirmed**:
 ### 2.4 Engine Initialization Time ("Startup Time")
 
 | Metric | Unit | Description |
-|--------|------|-------------|
+| --- | --- | --- |
 | Engine Init to First Frame | Milliseconds | Time from framework initialization (`didFinishLaunchingWithOptions` in Flutter, `StartupMetrics.init()` in iOS) to first frame rendered |
 
 **Important Clarifications**:
@@ -112,7 +112,7 @@ Based on benchmark testing, the hypothesis was **partially confirmed**:
 ### 2.5 Memory Usage
 
 | Metric | Unit | Description |
-|--------|------|-------------|
+| --- | --- | --- |
 | Peak Memory | Megabytes | Maximum RAM usage during test |
 | Baseline Memory | Megabytes | Idle app memory footprint |
 
@@ -128,7 +128,7 @@ Based on benchmark testing, the hypothesis was **partially confirmed**:
 ### 3.2 Software Versions
 
 | Component | Flutter App | iOS App |
-|-----------|-------------|---------|
+| --- | --- | --- |
 | **Framework** | Flutter 3.38.4 (stable) | SwiftUI (iOS 17.0+) |
 | **Language** | Dart 3.10.3 | Swift 6.2.3 |
 | **Rendering** | Impeller (Metal) | Core Animation / Metal |
@@ -235,7 +235,7 @@ let executionTimeUs = Int(executionTime * 1_000_000)
 ### 4.4 Key Design Decisions
 
 | Decision | Rationale |
-|----------|-----------|
+| --- | --- |
 | **Single-Threaded** | Compares Dart AOT vs LLVM compiler performance directly |
 | **Run on Main Thread** | Measures UI thread blocking behavior (realistic scenario) |
 | **No Isolate/GCD** | Eliminates scheduler/concurrency differences between platforms |
@@ -255,7 +255,7 @@ This benchmark intentionally avoids multi-threading to isolate **compiler/VM per
 Each of the 1,000 list items contains:
 
 | Component | Complexity Factor |
-|-----------|-------------------|
+| --- | --- |
 | Image (180px height) | Texture memory, decoding |
 | Gradient Overlay | Alpha compositing |
 | Box Shadow | Blur computation |
@@ -367,7 +367,7 @@ withAnimation(.linear(duration: 30)) {
 Both apps measure **frame-to-frame intervals** to ensure comparable metrics:
 
 | App | API | What's Measured |
-|-----|-----|-----------------|
+| --- | --- | --- |
 | Flutter | `SchedulerBinding.scheduleFrameCallback` | Time between consecutive frame callbacks |
 | iOS | `CADisplayLink` | Time between consecutive VSync signals |
 
@@ -439,7 +439,7 @@ func startFrameCallback() {
 Both apps use **1.5x the target frame time** (~25ms for 60 FPS) as the jank threshold:
 
 | FPS Target | Frame Budget | Jank Threshold (1.5x) |
-|------------|--------------|----------------------|
+| --- | --- | --- |
 | 60 FPS | 16.67 ms | ~25 ms |
 | 120 FPS (ProMotion) | 8.33 ms | ~12.5 ms |
 
@@ -449,7 +449,7 @@ Both apps use **1.5x the target frame time** (~25ms for 60 FPS) as the jank thre
 
 Both apps calculate **Actual FPS** based on elapsed time:
 
-```
+```text
 Actual FPS = Total Frames Rendered / Elapsed Time (seconds)
 ```
 
@@ -606,7 +606,7 @@ class StartupMetrics: ObservableObject {
 ### 8.4 What TTI Includes (Aligned Measurement)
 
 | Flutter | iOS |
-|---------|-----|
+| --- | --- |
 | `didFinishLaunchingWithOptions` start | `StartupMetrics.init()` |
 | Flutter engine initialization | SwiftUI App body creation |
 | Widget tree construction | View hierarchy creation |
@@ -617,7 +617,7 @@ class StartupMetrics: ObservableObject {
 ### 8.5 Startup Time Results
 
 | Metric | Flutter | iOS Native | Difference |
-|--------|---------|------------|------------|
+| --- | --- | --- | --- |
 | **Engine Init → First Frame** | ~27 ms | ~67 ms | **Flutter ~2.5x faster** |
 
 **Measurement Boundaries**:
@@ -640,7 +640,7 @@ class StartupMetrics: ObservableObject {
 ### 9.1 Tools
 
 | Platform | Tool | Metrics |
-|----------|------|---------|
+| --- | --- | --- |
 | Flutter | Flutter DevTools | Dart heap, widget rebuilds |
 | Flutter | Xcode Instruments | Native memory (iOS) |
 | iOS | Xcode Memory Debugger | Heap allocations, leaks |
@@ -657,7 +657,7 @@ class StartupMetrics: ObservableObject {
 ### 9.3 Expected Memory Components
 
 | Component | Flutter | iOS |
-|-----------|---------|-----|
+| --- | --- | --- |
 | Framework Overhead | ~40-60 MB | ~15-25 MB |
 | Image Cache | Variable | Variable |
 | Widget/View Tree | ~10-20 MB | ~5-10 MB |
@@ -676,7 +676,7 @@ class StartupMetrics: ObservableObject {
 ### 10.2 Statistical Measures
 
 | Measure | Purpose |
-|---------|---------|
+| --- | --- |
 | Mean | Central tendency |
 | Standard Deviation | Variance/consistency |
 | Min/Max | Range of results |
@@ -686,7 +686,7 @@ class StartupMetrics: ObservableObject {
 
 Both apps print results to console in a parseable format:
 
-```
+```text
 ═══════════════════════════════════════════════
 FLUTTER BENCHMARK - CPU TEST RESULTS
 ═══════════════════════════════════════════════
@@ -706,7 +706,7 @@ Execution time: 45230 μs
 ### 11.1 Identical Conditions
 
 | Variable | Flutter | iOS |
-|----------|---------|-----|
+| --- | --- | --- |
 | Algorithm | Sieve of Eratosthenes | Sieve of Eratosthenes |
 | Prime Limit | 1,000,000 | 1,000,000 |
 | List Items | 1,000 | 1,000 |
@@ -720,7 +720,7 @@ Execution time: 45230 μs
 ### 11.2 Uncontrollable Variables
 
 | Variable | Mitigation |
-|----------|------------|
+| --- | --- |
 | Background Processes | Close all apps, airplane mode |
 | Thermal Throttling | Wait between tests, start from cool state |
 | Battery State | Test between 20-80% charge |
@@ -812,7 +812,7 @@ md5 ios_benchmark/iOSBenchmark/Assets.xcassets/img_*/img_*.jpg
 
 ### CPU Test Output
 
-```
+```text
 ═══════════════════════════════════════════════
 [PLATFORM] BENCHMARK - CPU TEST RESULTS
 ═══════════════════════════════════════════════
@@ -826,7 +826,7 @@ Execution time: XX.XX ms
 
 ### GPU Test Output
 
-```
+```text
 ═══════════════════════════════════════════════
 [PLATFORM] BENCHMARK - GPU TEST STARTED
 ═══════════════════════════════════════════════
@@ -850,7 +850,7 @@ Battery drain: X%
 
 ### Startup Output
 
-```
+```text
 ═══════════════════════════════════════════════
 [PLATFORM] BENCHMARK - STARTUP TIME MEASUREMENT
 ═══════════════════════════════════════════════
@@ -874,7 +874,7 @@ Time to Interactive (TTI): XX.XX ms
 ### Exact Software Versions
 
 | Component | Version | Details |
-|-----------|---------|---------|
+| --- | --- | --- |
 | **Flutter** | 3.38.4 (stable) | Channel: stable |
 | **Dart** | 3.10.3 | AOT Compiler |
 | **Flutter Engine** | a5cb96369e | Impeller (Metal) |
@@ -885,7 +885,7 @@ Time to Interactive (TTI): XX.XX ms
 ### CPU Benchmark Results
 
 | Metric | Flutter | iOS Native | Difference |
-|--------|---------|------------|------------|
+| --- | --- | --- | --- |
 | **Algorithm** | Sieve of Eratosthenes | Sieve of Eratosthenes | Identical |
 | **Threading** | Single-threaded (main thread) | Single-threaded (main thread) | Identical |
 | **Prime Limit** | 1,000,000 | 1,000,000 | Identical |
@@ -903,7 +903,7 @@ Time to Interactive (TTI): XX.XX ms
 ### GPU/Rendering Benchmark Results
 
 | Metric | Flutter | iOS Native | Difference |
-|--------|---------|------------|------------|
+| --- | --- | --- | --- |
 | **Total Frames** | ~1750-1800 | ~1750-1800 | Equivalent |
 | **Actual FPS** | ~58-60 FPS | ~58-60 FPS | Equivalent |
 | **Jank Rate** | <1% | <1% | Equivalent |
@@ -919,7 +919,7 @@ Time to Interactive (TTI): XX.XX ms
 ### Startup Time Benchmark Results
 
 | Metric | Flutter | iOS Native | Difference |
-|--------|---------|------------|------------|
+| --- | --- | --- | --- |
 | **Engine Init → First Frame** | ~27 ms | ~67 ms | **Flutter ~2.5x faster** |
 
 **Measurement Scope**:
@@ -939,7 +939,7 @@ Time to Interactive (TTI): XX.XX ms
 ### Key Conclusions
 
 | Category | Winner | Margin | Use Case Implication |
-|----------|--------|--------|---------------------|
+| --- | --- | --- | --- |
 | **Startup Time** | Flutter | ~2.5x | Flutter apps launch faster |
 | **CPU Computation** | iOS Native | ~3x | Use native code for compute-heavy tasks |
 | **UI Rendering** | Tie | 0% | Flutter is viable for UI-heavy apps |

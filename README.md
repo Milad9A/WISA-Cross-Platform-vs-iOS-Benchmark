@@ -12,12 +12,19 @@ This benchmark suite provides an **apples-to-apples** performance comparison bet
 ## 📊 Metrics Measured
 
 | Metric | Description | Implementation |
-|--------|-------------|----------------|
+| --- | --- | --- |
 | **CPU Efficiency** | Single-thread performance | Sieve of Eratosthenes (1M primes) on main thread |
 | **FPS Stability** | Frame rendering consistency | 1000-item list with 30s auto-scroll |
 | **Memory (RAM)** | Memory allocator stress | Complex UI elements with gradients/shadows |
 | **Battery Impact** | Energy consumption | Battery level delta during GPU test |
 | **App Startup Time** | Time to Interactive (TTI) | main() → first frame rendered |
+
+---
+
+## 📜 Documentation
+
+- **[TECHNICAL.md](./TECHNICAL.md)** - Comprehensive technical details about benchmark methodology, implementation, measurement approaches, and results analysis
+- **[Academic Paper](./documentation/paper.tex)** - Full scientific documentation in LaTeX
 
 ---
 
@@ -27,29 +34,25 @@ Below are visual examples of the apps and their benchmark tests:
 
 ### Home Screen (iOS)
 
-<img src="./screenshots/home_ios.png" alt="iOS Home Screen" width="250"/>
+![iOS Home Screen](./screenshots/home_ios.png)
 
 ### Home Screen (Flutter)
 
-<img src="./screenshots/home_flutter.png" alt="Flutter Home Screen" width="250"/>
+![Flutter Home Screen](./screenshots/home_flutter.png)
 
 ### Demo Video (iOS)
 
-<video src="./screenshots/demo_ios.mp4" controls width="250">
-    Your browser does not support the video tag.
-</video>
+[Watch iOS Demo Video](./screenshots/demo_ios.mp4)
 
 ### Demo Video (Flutter)
 
-<video src="./screenshots/demo_flutter.mp4" controls width="250">
-    Your browser does not support the video tag.
-</video>
+[Watch Flutter Demo Video](./screenshots/demo_flutter.mp4)
 
 ---
 
 ## 🏗️ Project Structure
 
-```
+```text
 Projects/
 ├── flutter_benchmark/           # Flutter App
 │   ├── lib/
@@ -77,7 +80,7 @@ Projects/
 **Purpose:** Measure raw single-thread computational performance.
 
 | Parameter | Value |
-|-----------|-------|
+| --- | --- |
 | Algorithm | Sieve of Eratosthenes |
 | Range | 2 to 1,000,000 |
 | Expected Result | 78,498 primes |
@@ -93,7 +96,7 @@ Projects/
 **Purpose:** Stress the GPU rasterizer and memory allocator.
 
 | Parameter | Value |
-|-----------|-------|
+| --- | --- |
 | List Items | 1,000 complex items |
 | Item Content | Gradient backgrounds, shadows, tags, buttons |
 | Auto-Scroll Duration | **30 seconds** (constant velocity) |
@@ -112,7 +115,7 @@ Projects/
 **Purpose:** Measure energy consumption during GPU stress.
 
 | Parameter | Value |
-|-----------|-------|
+| --- | --- |
 | Method | Battery level % before/after 30s scroll |
 | Implementation | `UIDevice.batteryLevel` (iOS) / MethodChannel (Flutter) |
 | Output | Delta percentage (e.g., "Battery Drain: 1%") |
@@ -126,7 +129,7 @@ Projects/
 **Purpose:** Measure Time to Interactive.
 
 | Event | Flutter | iOS |
-|-------|---------|-----|
+| --- | --- | --- |
 | Start | `main()` function called | `@main` app launch |
 | End | `addPostFrameCallback` fires | `.onAppear` modifier |
 | Measurement | Microseconds (μs) | Microseconds (μs) |
@@ -165,7 +168,7 @@ flutter run --profile
 
 Both apps print detailed logs:
 
-```
+```text
 ═══════════════════════════════════════════════
 FLUTTER BENCHMARK - CPU TEST RESULTS
 ═══════════════════════════════════════════════
@@ -180,7 +183,7 @@ Execution time: 45.23 ms
 ### Key Metrics to Compare
 
 | Metric | Good | Acceptable | Poor |
-|--------|------|------------|------|
+| --- | --- | --- | --- |
 | CPU Time | < 50ms | 50-100ms | > 100ms |
 | Jank Rate | < 1% | 1-5% | > 5% |
 | Est. FPS | ≥ 58 | 50-58 | < 50 |
