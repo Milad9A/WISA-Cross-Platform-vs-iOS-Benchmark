@@ -57,21 +57,35 @@ Below are screenshots and video demos of the apps and their benchmark tests:
 
 ```text
 Projects/
-├── flutter_benchmark/           # Flutter App
+├── flutter_benchmark/                  # Flutter App
 │   ├── lib/
-│   │   ├── main.dart           # Entry point + Navigation + Startup
-│   │   └── screens/
-│   │       ├── cpu_test_screen.dart    # CPU benchmark
-│   │       └── gpu_test_screen.dart    # GPU/FPS/Memory/Battery test
-│   ├── pubspec.yaml
-│   └── ios/Runner/AppDelegate.swift    # Battery MethodChannel
+│   │   ├── main.dart                   # Entry point + startup time measurement
+│   │   ├── app.dart                    # App root & routing
+│   │   ├── core/                       # Config, theme, utilities
+│   │   ├── features/
+│   │   │   ├── cpu_test/               # CPU benchmark screen & algorithm
+│   │   │   ├── gpu_test/               # GPU/FPS/Memory/Battery test screen
+│   │   │   └── home/                   # Home screen
+│   │   ├── services/                   # Battery & memory MethodChannels
+│   │   └── widgets/                    # Shared UI components
+│   ├── ios/Runner/AppDelegate.swift    # Battery MethodChannel (native side)
+│   └── pubspec.yaml
 │
-└── ios_benchmark/               # Native iOS App (SwiftUI)
-    └── iOSBenchmark/
-        ├── iOSBenchmarkApp.swift       # Entry point + Startup
-        ├── ContentView.swift           # Navigation
-        ├── CPUTestView.swift           # CPU benchmark
-        └── GPUTestView.swift           # GPU/FPS/Memory/Battery test
+├── ios_benchmark/                      # Native iOS App (SwiftUI)
+│   └── iOSBenchmark/
+│       ├── iOSBenchmarkApp.swift       # Entry point + startup time measurement
+│       ├── ContentView.swift           # Navigation
+│       ├── CPUTestView.swift           # CPU benchmark
+│       └── GPUTestView.swift           # GPU/FPS/Memory/Battery test
+│
+├── documentation/                      # Academic paper (LaTeX)
+│   ├── paper.tex
+│   └── refs.bib
+│
+├── screenshots/                        # App screenshots & demo media
+├── presentation/                       # Presentation slides
+├── README.md
+└── TECHNICAL.md                        # Benchmark methodology & results analysis
 ```
 
 ---
