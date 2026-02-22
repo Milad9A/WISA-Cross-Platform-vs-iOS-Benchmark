@@ -1,9 +1,9 @@
 <!-- markdownlint-disable MD033 -->
 <!-- markdownlint-disable MD041 -->
 <p align="center">
-  <img src="./flutter_benchmark/assets/icon/app_icon.png" alt="Flutter App Icon" width="120" style="border-radius: 22%;"/>
+  <img src="./assets/icons/flutter_icon_rounded.png" alt="Flutter App Icon" width="120"/>
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="./ios_benchmark/iOSBenchmark/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png" alt="iOS App Icon" width="120" style="border-radius: 22%;"/>
+  <img src="./assets/icons/ios_icon_rounded.png" alt="iOS App Icon" width="120"/>
 </p>
 
 <h1 align="center"> WISA Course - Scientific Framework Comparison</h1>
