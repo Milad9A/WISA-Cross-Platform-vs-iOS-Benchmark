@@ -12,6 +12,11 @@
 \usepackage{longtable,booktabs,array,calc}
 \usepackage{float}
 
+\emergencystretch=3em
+\raggedbottom
+\hbadness=10000
+\vbadness=10000
+
 \hyphenation{op-tical net-works semi-conduc-tor}
 
 \begin{document}
@@ -136,7 +141,7 @@ The algorithm was chosen for its deterministic nature (the expected output of 78
 	\item Threading Context: The algorithm is intentionally executed on the Main UI Thread in a
 	      single-threaded context. This design choice eliminates variables introduced by thread schedulers and
 	      directly compares the performance of the Dart AOT compiler versus the Swift LLVM compiler.
-	\item Measurement: Execution time is measured in microseconds (\textmu s) using \texttt{Stopwatch} (Dart) and \texttt{CFAbsoluteTimeGetCurrent} (Swift).
+	\item Measurement: Execution time is measured in microseconds (\textmu s) using \texttt{Stopwatch} (Dart) and \texttt{CFAbsolute\-Time\-Get\-Current} (Swift).
 \end{itemize}
 
 \subsubsection{GPU Rendering Test (Complex List)}
@@ -144,7 +149,7 @@ To evaluate rendering performance, a scrollable list containing 1,000 complex it
 item includes a 180-pixel-height image, a gradient overlay with alpha compositing, a box shadow requiring blur computation, rounded corners with clipping masks, four tag chips with border rendering, a progress bar, and two outlined buttons. This composition was designed to stress the rasterizer across multiple GPU-bound operations simultaneously.
 
 \begin{itemize}
-	\item Measurement: An automated linear scroll at constant velocity is performed for 30 seconds. Frame intervals are logged via \texttt{SchedulerBinding.scheduleFrameCallback} (Flutter) and \texttt{CADisplayLink} (iOS).
+	\item Measurement: An automated linear scroll at constant velocity is performed for 30 seconds. Frame intervals are logged via \texttt{Scheduler\-Binding.\-schedule\-Frame\-Callback} (Flutter) and \texttt{CADisplay\-Link} (iOS).
 	\item Jank Definition: Any frame taking longer than 25~ms (approximately $1.5\times$ the 16.67~ms target) is flagged as
 	      ``Jank'' to distinguish actual dropped frames from minor VSync variances.
 \end{itemize}
@@ -164,9 +169,9 @@ To ensure ecological validity, all experiments were conducted on a physical iPho
 \begin{itemize}
 	\item Conditions: Devices were placed in Airplane Mode with background processes terminated. Battery
 	      levels were maintained between 20--80\% to prevent thermal throttling.
-	\item Native Build: Xcode 26.2 (Build 17C52), Swift 6.2.3, LLVM optimization level -O.
-	\item Flutter Build: Flutter 3.38.4 (Stable), Dart 3.10.3 (AOT), utilizing the Impeller rendering engine
-	      (Build a5cb96369e).
+	\item Native Build: Xcode 26.2 (Build 17C52), Swift 6.2.3, LLVM optimization level~\texttt{-O}.
+	\item Flutter Build: Flutter 3.38.4 (Stable), Dart 3.10.3 (AOT), utilizing the
+	      Impeller rendering engine (Build a5cb96369e).
 \end{itemize}
 
 \subsection{Reproducibility}
@@ -259,17 +264,17 @@ Table~\ref{tab:summary} provides a consolidated comparison of all measured metri
 	\caption{Consolidated benchmark results (iPhone~14, $n = 30$ runs).}
 	\label{tab:summary}
 	\centering
-	\small
+	\footnotesize
 	\begin{tabular}{llll}
 		\toprule
-		\textbf{Metric} & \textbf{Native iOS} & \textbf{Flutter} & \textbf{Factor} \\
+		\textbf{Metric}  & \textbf{Native iOS} & \textbf{Flutter} & \textbf{Factor}       \\
 		\midrule
-		CPU Time (ms)       & $7.32 \pm 0.43$   & $33.03 \pm 0.71$  & $4.5\times$ (iOS)    \\
-		Avg.\ FPS            & 59.4               & 59.9               & $\approx 1\times$   \\
-		Jank Rate (\%)      & 0.5                & 0.0                & Flutter better       \\
-		Init Time (ms)      & 65.95              & 27.85              & $2.4\times$ (Flutter) \\
-		Idle RAM (MB)       & $\approx$18       & $\approx$54       & $3\times$ (iOS)      \\
-		Binary Size (MB)    & 2.8                & 14.3               & $5\times$ (iOS)      \\
+		CPU Time (ms)    & $7.32 \pm 0.43$     & $33.03 \pm 0.71$ & $4.5\times$ (iOS)     \\
+		Avg.\ FPS        & 59.4                & 59.9             & $\approx 1\times$     \\
+		Jank Rate (\%)   & 0.5                 & 0.0              & Flutter better        \\
+		Init Time (ms)   & 65.95               & 27.85            & $2.4\times$ (Flutter) \\
+		Idle RAM (MB)    & $\approx$18         & $\approx$54      & $3\times$ (iOS)       \\
+		Binary Size (MB) & 2.8                 & 14.3             & $5\times$ (iOS)       \\
 		\bottomrule
 	\end{tabular}
 \end{table}
@@ -300,7 +305,7 @@ specific workload:
 These results have direct implications for mobile architecture decisions in practice:
 
 \begin{itemize}
-	\item Team Size and Cost: For organizations maintaining a single codebase across iOS and Android, Flutter eliminates the need for separate platform teams. Given that UI rendering performance is now equivalent, the primary trade-off is no longer visual quality but rather computational overhead and binary size.
+	\item Team Size and Cost: For organizations maintaining a single codebase across iOS and Android, Flutter eliminates the need for separate platform teams. Given that UI rendering performance is now equivalent, the primary trade-off is no longer visual quality but computational overhead and binary size.
 	\item Hybrid Architecture: For applications that are primarily UI-driven but contain isolated compute-intensive features (e.g., on-device machine learning or cryptographic operations), a hybrid approach using Flutter's platform channels to delegate critical algorithms to native Swift code can capture the benefits of both architectures.
 	\item Size-Constrained Deployments: The $5\times$ binary size overhead renders Flutter unsuitable for Apple App Clips, which enforce a strict 15~MB limit. For such use cases, native development remains the only viable option.
 	\item Time-to-Market: Flutter's single-codebase model and faster engine initialization time make it particularly advantageous for startups and MVPs where development velocity is prioritized over raw computational performance.
@@ -310,8 +315,8 @@ These results have direct implications for mobile architecture decisions in prac
 \begin{itemize}
 	\item Device Coverage: All experiments were conducted exclusively on an iPhone~14. Performance characteristics may differ on older devices (e.g., iPhone~11 or~12) where tighter resource constraints could amplify or diminish the observed differences.
 	\item Framework Scope: This study compares only Flutter against Native iOS. Other prominent cross-platform frameworks, notably React Native, were not evaluated. Consequently, the findings should not be generalized to all cross-platform approaches.
-	\item Statistical Significance: While standard deviations are reported, formal hypothesis tests (e.g., $t$-tests or Mann-Whitney $U$ tests) with $p$-values and confidence intervals were not performed. The reported differences, though consistent across $n = 30$ runs, lack formal significance verification.
-	\item Benchmark Representativeness: The CPU benchmark (Sieve of Eratosthenes) measures raw algorithmic throughput but does not represent typical application workloads such as JSON parsing, database operations, or network I/O. Future work should incorporate more realistic task profiles.
+	\item Statistical Significance: While standard deviations are reported, formal hypothesis tests (e.g., $t$-tests or Mann--Whitney $U$ tests) with $p$-values and confidence intervals were not performed. The reported differences, though consistent across $n = 30$ runs, lack formal significance verification.
+	\item Benchmark Representativeness: The CPU benchmark (Sieve of Eratosthenes) measures raw algorithmic throughput but does not represent typical application workloads such as JSON parsing, database queries, or network I/O. Future work should incorporate more realistic task profiles.
 	\item Battery Granularity: Battery consumption analysis was inconclusive due to the 1\% granularity of the
 	      UIDevice API. Precise power profiling requires long-term stress tests exceeding one hour.
 	\item Memory Overhead: Our profiling confirmed a distinct memory trade-off. The cross-platform runtime
