@@ -42,18 +42,33 @@ D.~You and M.~Hu, ``A comparative study of cross-platform mobile application dev
 \bibitem{horn2023}
 R.~Horn, A.~Lahnaoui, E.~Reinoso, S.~Peng, V.~Isakov, T.~Islam, and I.~Malavolta, ``Native vs web apps: Comparing the energy consumption and performance of android apps and their web counterparts,'' in \emph{Proceedings of the 8th International Conference on Mobile Software Engineering and Systems (MOBILESoft '23)}, 2023.
 
+\bibitem{apple2024swift}
+\BIBentryALTinterwordspacing
+{Apple Inc.}, ``The swift programming language,'' 2024, accessed: 2026-02-20. [Online]. Available: \url{https://docs.swift.org/swift-book/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{apple2024swiftui}
+\BIBentryALTinterwordspacing
+------, ``Swiftui overview,'' 2024, accessed: 2026-02-20. [Online]. Available: \url{https://developer.apple.com/xcode/swiftui/}
+\BIBentrySTDinterwordspacing
+
+\bibitem{dart2024}
+\BIBentryALTinterwordspacing
+{Google}, ``Dart programming language,'' 2024, accessed: 2026-02-20. [Online]. Available: \url{https://dart.dev/overview}
+\BIBentrySTDinterwordspacing
+
 \bibitem{bjornhansen2018}
 A.~Bi{\o}rn-Hansen, T.~A. Majchrzak, and T.-M. Gr{\o}nli, ``Progressive web apps: The possible web-native unifier for mobile development,'' in \emph{Proceedings of the 13th International Conference on Web Information Systems and Technologies}, 2018, pp. 344--351.
+
+\bibitem{impeller2024}
+\BIBentryALTinterwordspacing
+{Google}, ``Impeller rendering engine,'' 2024, accessed: 2026-02-20. [Online]. Available: \url{https://docs.flutter.dev/perf/impeller}
+\BIBentrySTDinterwordspacing
 
 \bibitem{nawrocki2021}
 P.~Nawrocki, K.~Wrona, M.~Marczak, and B.~Sniezynski, ``A comparison of native and cross-platform frameworks for mobile applications,'' in \emph{Computer}, vol.~54, no.~3.\hskip 1em plus 0.5em minus 0.4em\relax IEEE, 2021, pp. 18--27.
 
 \bibitem{pinto2021}
 C.~M. Pinto and C.~Coutinho, ``From native to cross-platform hybrid development,'' in \emph{Proceedings of the International Conference on Enterprise Information Systems (ICEIS)}, 2018, pp. 541--548.
-
-\bibitem{impeller2024}
-\BIBentryALTinterwordspacing
-{Google}, ``Impeller rendering engine,'' 2024, accessed: 2026-02-20. [Online]. Available: \url{https://docs.flutter.dev/perf/impeller}
-\BIBentrySTDinterwordspacing
 
 \end{thebibliography}

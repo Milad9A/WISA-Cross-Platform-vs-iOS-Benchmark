@@ -25,7 +25,8 @@
 
 \title{Comparative Analysis of Native vs. Cross-Platform Mobile Development: An Empirical Performance Study on iOS}
 
-\author{\textbf{Milad Awad} \textit{Hochschule Bremen - mawad@stud.hs-bremen.de}%
+\author{\textbf{Milad Awad} \textit{Hochschule Bremen -- Matrikelnr. 5358834 -- mawad@stud.hs-bremen.de}%
+	\\Supervisor: M.\,Sc.\,Tuncer Catalkaya%
 	\vspace{-0.5cm}
 }
 
@@ -34,7 +35,7 @@
 \begin{abstract}
 	In the domain of mobile application development, the choice between native and cross-platform approaches
 	remains a critical dilemma for software engineers and stakeholders. While cross-platform frameworks like
-	Flutter offer significant cost reductions, concerns regarding performance overhead persist. This paper
+	Flutter offer significant cost reductions, concerns regarding performance overhead persist. This article
 	presents a comparative analysis of native iOS (Swift) and Flutter development, focusing on system resource
 	efficiency on physical iPhone 14 hardware. A standardized benchmark measured CPU efficiency, GPU rendering
 	stability, and Engine Initialization Time. The results indicate that while Native iOS outperforms Flutter
@@ -73,8 +74,8 @@ Android for their data collection~\cite{you2021, horn2023}.
 To address this gap, this research aims to provide a data-driven decision guide for mobile architecture
 in 2026. The central research question is:
 
-To what extent does the performance overhead of state-of-the-art cross-platform frameworks (Flutter)
-impact system resources compared to native development (Swift) on iOS devices?
+\textit{To what extent does the performance overhead of state-of-the-art cross-platform frameworks (Flutter)
+impact system resources compared to native development (Swift) on iOS devices?}
 
 This is operationalized through three key metrics, selected because they represent the primary dimensions of user-perceivable application quality~\cite{bjornhansen2020}: computational responsiveness, visual fluidity, and startup latency.
 
@@ -85,8 +86,28 @@ This is operationalized through three key metrics, selected because they represe
 	      runtime environment.
 \end{enumerate}
 
-\subsection{Paper Structure}
-The remainder of this paper is organized as follows. Section~II reviews the related work on cross-platform frameworks, performance benchmarking, and resource efficiency. Section~III describes the experimental design, the benchmark application, and the test environment. Section~IV presents the quantitative results across all metrics. Section~V discusses the interpretation of the findings and the limitations of this study. Finally, Section~VI concludes the paper with a summary and practical recommendations.
+\subsection{Article Structure}
+The remainder of this article is organized as follows. Section~II introduces the technical background on native and cross-platform development. Section~III reviews the related work on cross-platform frameworks, performance benchmarking, and resource efficiency. Section~IV describes the experimental design, the benchmark application, and the test environment. Section~V presents the quantitative results across all metrics. Section~VI discusses the interpretation of the findings and the limitations of this study. Finally, Section~VII concludes the article with a summary and practical recommendations.
+
+\section{Background}
+This section introduces the key technologies and concepts that underpin the comparative analysis presented in this article.
+
+\subsection{Native iOS Development}
+Native iOS applications are developed using Apple's proprietary toolchain. Swift~\cite{apple2024swift}, Apple's modern programming language, is compiled via the LLVM compiler infrastructure, which applies aggressive optimizations such as auto-vectorization, loop unrolling, and stack-based memory allocation for primitive types. The user interface layer is built with SwiftUI~\cite{apple2024swiftui}, a declarative framework introduced in 2019 that constructs a view hierarchy managed by the UIKit runtime. Rendering is performed through Core Animation, which composites layers on the GPU via Apple's Metal graphics API.
+
+\subsection{Flutter and Dart}
+Flutter is Google's open-source UI toolkit for building natively compiled applications from a single codebase~\cite{flutter2024}. It uses Dart~\cite{dart2024} as its programming language, which supports both Just-in-Time (JIT) compilation for development and Ahead-of-Time (AOT) compilation for production builds. Unlike hybrid frameworks that rely on platform UI components or web views, Flutter renders every pixel directly through its own rendering engine, bypassing the host platform's UI toolkit entirely~\cite{bjornhansen2018}.
+
+\subsection{The Impeller Rendering Engine}
+Impeller is Flutter's modern rendering backend, introduced to replace the Skia-based engine~\cite{impeller2024}. Its key architectural innovation is the pre-compilation of all shader programs at build time, which eliminates the runtime shader compilation pauses (commonly known as ``shader jank'') that plagued the previous Skia backend. On iOS, Impeller renders directly through Apple's Metal API, producing a pipeline conceptually similar to---but independent from---the native Core Animation stack.
+
+\subsection{Key Metrics}
+The following metrics are used throughout this article to quantify performance differences:
+\begin{itemize}
+	\item \textbf{CPU Efficiency}: The wall-clock execution time of a deterministic algorithm on the main thread, measured in milliseconds (ms).
+	\item \textbf{Rendering Stability}: The average frames per second (FPS) and the Jank rate, defined as the percentage of frames exceeding a 25~ms threshold ($1.5\times$ the 16.67~ms target at 60~Hz).
+	\item \textbf{Engine Initialization Time}: The interval from the framework's initialization hook to the first rasterized frame, excluding OS-level process creation overhead.
+\end{itemize}
 
 \section{Related Work}
 \subsection{Evolution of Cross-Platform Frameworks}
@@ -104,7 +125,7 @@ Bi\o rn-Hansen et al.~\cite{bjornhansen2018} further proposed a taxonomy of mobi
 Direct performance comparisons have yielded mixed results. You and Hu~\cite{you2021} conducted a
 comparative study concluding that Native development generally offers superior efficiency. However, their
 research heavily relied on Android emulators rather than physical iOS hardware. This creates a gap in the
-literature regarding real-world performance on Apple silicon, which this paper addresses.
+literature regarding real-world performance on Apple silicon, which this article addresses.
 
 Nawrocki et al.~\cite{nawrocki2021} performed a broader comparison of native and cross-platform frameworks, evaluating Flutter, React Native, and Xamarin across multiple dimensions including CPU time, memory consumption, and application size. Their findings confirmed that native applications consistently use fewer system resources, but noted that the gap was narrowing with each framework generation---particularly for Flutter, whose compiled output approaches native efficiency. Pinto and Coutinho~\cite{pinto2021} similarly observed that modern cross-platform tools had achieved a level of maturity where the performance penalty was no longer prohibitive for most business applications.
 
@@ -113,12 +134,12 @@ Existing research has often focused on the divide between native code and web-ba
 al.~\cite{horn2023} investigated the performance and energy impact of Progressive Web Apps (PWAs) versus
 Native Android applications. Their empirical results demonstrated that Web Apps consume significantly
 more energy---often due to the continuous overhead of the browser engine and JavaScript execution---and
-struggle to match the CPU performance of native code. This paper extends that inquiry by investigating
+struggle to match the CPU performance of native code. This article extends that inquiry by investigating
 whether Flutter, which compiles to native machine code rather than relying on web technologies, suffers
 from similar resource inefficiencies on iOS.
 
 \subsection{Summary}
-In summary, existing research has established that cross-platform frameworks have matured significantly from their early hybrid origins~\cite{majchrzak2017, bjornhansen2020}, evolving through interpreted and compiled approaches~\cite{bjornhansen2018} to modern GPU-accelerated engines like Impeller~\cite{impeller2024}. Comparative benchmarks have consistently shown a resource overhead for cross-platform solutions~\cite{nawrocki2021, pinto2021}, yet direct comparisons remain inconclusive and are predominantly based on Android emulators~\cite{you2021} or web-based technologies~\cite{horn2023}. A significant gap persists in the literature: no study has conducted a controlled, empirical comparison of Flutter's latest Impeller engine and Native iOS performance on physical Apple hardware using current toolchains. This paper addresses that gap by providing reproducible benchmark data collected on a physical iPhone~14, directly comparing Flutter~3.38 against native Swift/SwiftUI compiled with LLVM.
+In summary, existing research has established that cross-platform frameworks have matured significantly from their early hybrid origins~\cite{majchrzak2017, bjornhansen2020}, evolving through interpreted and compiled approaches~\cite{bjornhansen2018} to modern GPU-accelerated engines like Impeller~\cite{impeller2024}. Comparative benchmarks have consistently shown a resource overhead for cross-platform solutions~\cite{nawrocki2021, pinto2021}, yet direct comparisons remain inconclusive and are predominantly based on Android emulators~\cite{you2021} or web-based technologies~\cite{horn2023}. A significant gap persists in the literature: no study has conducted a controlled, empirical comparison of Flutter's latest Impeller engine and Native iOS performance on physical Apple hardware using current toolchains. This article addresses that gap by providing reproducible benchmark data collected on a physical iPhone~14, directly comparing Flutter~3.38 against native Swift/SwiftUI compiled with LLVM.
 
 \section{Experimental Design}
 \subsection{Approach}
@@ -143,7 +164,7 @@ The algorithm was chosen for its deterministic nature (the expected output of 78
 	\item Threading Context: The algorithm is intentionally executed on the Main UI Thread in a
 	      single-threaded context. This design choice eliminates variables introduced by thread schedulers and
 	      directly compares the performance of the Dart AOT compiler versus the Swift LLVM compiler.
-	\item Measurement: Execution time is measured in microseconds (\textmu s) using \texttt{Stopwatch} (Dart) and \texttt{CFAbsolute\-Time\-Get\-Current} (Swift).
+	\item Measurement: Execution time is measured in milliseconds (ms) using \texttt{Stopwatch} (Dart) and \texttt{CFAbsolute\-Time\-Get\-Current} (Swift).
 \end{itemize}
 
 \subsubsection{GPU Rendering Test (Complex List)}
@@ -178,9 +199,12 @@ To ensure ecological validity, all experiments were conducted on a physical iPho
 
 \subsection{Reproducibility}
 To foster transparency and independent verification, the complete source code for both benchmark
-applications (Native and Flutter) has been made open-source. The repository is available at:
+applications (Native and Flutter) has been made open-source. The repository also includes detailed technical documentation, screenshots of the benchmark application, and demo videos illustrating the test procedures. The repository is available at:
 \\
 \url{https://github.com/Milad9A/WISA-iOS-Benchmark}
+
+\subsection{Use of AI Tools}
+In accordance with academic transparency requirements, I disclose that AI-based language models were used during the preparation of this article for editorial assistance, including grammar checking, phrasing suggestions, and code review. All generated content was critically reviewed, verified, and adapted by me. The scientific analysis, experimental design, data collection, and interpretation of results are entirely my own work.
 
 \section{Results}
 To ensure statistical rigor, each benchmark was executed $n = 30$ times on a physical iPhone 14 running iOS
@@ -218,12 +242,7 @@ achieved the 60 Hz target, but with different stability characteristics.
 	\item Native iOS (SwiftUI): Averaged 59.4 FPS with 9 dropped frames and a 0.5\% Jank rate.
 \end{itemize}
 
-Analysis: Contrary to historical assumptions, the cross-platform solution (Flutter) slightly
-outperformed the native solution in frame stability (Fig.~\ref{fig:gpu}). This is attributed to
-Flutter's Impeller rendering engine~\cite{impeller2024}, which pre-compiles all shaders at build time to eliminate runtime shader compilation hitches---a problem that previously plagued Flutter's older Skia backend.
-Both frameworks ultimately render via Apple's Metal API; however, Flutter bypasses Core Animation entirely and rasterizes its own widget tree directly, resulting in more predictable frame pacing.
-While SwiftUI maintained a high average FPS, it exhibited minor volatility (max frame time
-of approximately 77~ms) likely due to main-thread layout passes during rapid scrolling.
+Analysis: Contrary to historical assumptions, Flutter slightly outperformed the native solution in frame stability (Fig.~\ref{fig:gpu}). This is attributed to the Impeller engine~\cite{impeller2024}, which pre-compiles all shaders at build time, eliminating runtime compilation hitches. Flutter bypasses Core Animation and rasterizes its widget tree directly via Metal, resulting in more predictable frame pacing. SwiftUI exhibited minor volatility (max frame time of approximately 77~ms), likely due to main-thread layout passes during rapid scrolling.
 
 \begin{figure}[H]
 	\centering
@@ -242,8 +261,7 @@ first frame.
 \end{itemize}
 
 Analysis: Flutter demonstrated an initialization speed approximately $2.4\times$ faster than Native iOS
-(Fig.~\ref{fig:init}). This result indicates that the pre-warmed Flutter engine, combined with Dart's AOT-compiled machine code, can construct its initial
-widget tree more rapidly than the SwiftUI runtime can resolve its declarative view hierarchy and initialize \texttt{@StateObject} instances. It should be noted that this metric excludes OS-level cold-start overhead (process creation, dynamic library loading), which typically adds 100--300~ms to the total user-perceived launch time on both platforms.
+(Fig.~\ref{fig:init}). The pre-warmed Flutter engine, combined with Dart's AOT-compiled machine code, constructs its initial widget tree more rapidly than SwiftUI can resolve its declarative view hierarchy. Note that this metric excludes OS-level cold-start overhead (process creation, dynamic library loading), which typically adds 100--300~ms on both platforms.
 
 \begin{figure}[H]
 	\centering
@@ -254,12 +272,19 @@ widget tree more rapidly than the SwiftUI runtime can resolve its declarative vi
 
 \subsection{Resource Footprint}
 \begin{itemize}
-	\item Memory (RAM): Native iOS was significantly more efficient, consuming approximately 18~MB at idle compared
+	\item Memory (RAM): As shown in Fig.~\ref{fig:memory}, Native iOS was significantly more efficient, consuming approximately 18~MB at idle compared
 	      to Flutter's approximately 54~MB. The additional 36~MB overhead in Flutter represents the cost of
 	      the Dart VM isolate and the Impeller rendering engine. This overhead is consistent with the resource profiles reported by Nawrocki et al.~\cite{nawrocki2021}.
 	\item Binary Size: The compiled application size (Release .ipa) was 2.8~MB for Native iOS versus 14.3~MB
 	      for Flutter, reflecting the fixed cost of embedding the Flutter engine and the Dart runtime.
 \end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{media/image1.png}
+	\caption{Baseline memory footprint (Idle). Native iOS requires significantly less RAM.}
+	\label{fig:memory}
+\end{figure}
 
 Table~\ref{tab:summary} provides a consolidated comparison of all measured metrics.
 
@@ -282,15 +307,8 @@ Table~\ref{tab:summary} provides a consolidated comparison of all measured metri
 	\end{tabular}
 \end{table}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\linewidth]{media/image1.png}
-	\caption{Baseline memory footprint (Idle). Native iOS requires significantly less RAM.}
-	\label{fig:memory}
-\end{figure}
-
 \section{Discussion}
-This section interprets the empirical results presented in Section~IV and discusses their practical implications for mobile architecture decisions, followed by the limitations of this study.
+This section interprets the empirical results presented in Section~V and discusses their practical implications for mobile architecture decisions, followed by the limitations of this study.
 
 \subsection{Interpretation of Results}
 The data indicates that the ``performance gap'' is no longer a binary issue but depends heavily on the
@@ -329,7 +347,7 @@ These results have direct implications for mobile architecture decisions in prac
 \end{itemize}
 
 \section{Conclusion}
-This paper presented a comparative analysis of Native iOS and Flutter development on physical iPhone~14
+This article presented a comparative analysis of Native iOS and Flutter development on physical iPhone~14
 hardware. Through a standardized benchmark, we demonstrated that under the tested conditions---a single device, Release-mode builds, and single-threaded synthetic workloads---Native Swift remains the superior choice
 for raw CPU computation, outperforming Flutter by approximately $4.5\times$ in single-threaded tasks. However,
 Flutter has achieved parity in UI rendering via the Impeller engine and demonstrates superior performance
@@ -370,5 +388,11 @@ Future work should extend this comparison to additional devices, include React N
 		\bottomrule
 	\end{tabular}
 \end{table}
+
+\section*{Declaration of Authorship}
+I hereby declare that this article is entirely my own work and that I have not used any sources or aids other than those listed. All passages taken verbatim or in substance from published or unpublished sources have been identified as such.
+
+\vspace{1cm}
+\noindent Bremen, February 2026 \hfill Milad Awad
 
 \end{document}

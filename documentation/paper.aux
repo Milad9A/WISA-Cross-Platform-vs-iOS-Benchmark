@@ -11,17 +11,23 @@
 \citation{horn2023}
 \citation{you2021,horn2023}
 \citation{bjornhansen2020}
-\citation{majchrzak2017}
-\citation{bjornhansen2020}
-\citation{bjornhansen2018}
-\citation{flutter2024}
+\citation{apple2024swift}
+\citation{apple2024swiftui}
 \@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{section.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {I-A}}Motivation}{1}{subsection.1.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {I-B}}Problem Statement}{1}{subsection.1.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {I-C}}Research Question}{1}{subsection.1.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {I-D}}Paper Structure}{1}{subsection.1.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {II}Related Work}{1}{section.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Evolution of Cross-Platform Frameworks}{1}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {I-D}}Article Structure}{1}{subsection.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {II}Background}{1}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Native iOS Development}{1}{subsection.2.1}\protected@file@percent }
+\citation{flutter2024}
+\citation{dart2024}
+\citation{bjornhansen2018}
+\citation{impeller2024}
+\citation{majchrzak2017}
+\citation{bjornhansen2020}
+\citation{bjornhansen2018}
+\citation{flutter2024}
 \citation{you2021}
 \citation{nawrocki2021}
 \citation{pinto2021}
@@ -32,39 +38,47 @@
 \citation{nawrocki2021,pinto2021}
 \citation{you2021}
 \citation{horn2023}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Performance Benchmarking}{2}{subsection.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Energy and Resource Efficiency}{2}{subsection.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}Summary}{2}{subsection.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {III}Experimental Design}{2}{section.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Approach}{2}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}The Artifact: Benchmark Application}{2}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}1}CPU Stress Test (Sieve of Eratosthenes)}{2}{subsubsection.3.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}2}GPU Rendering Test (Complex List)}{2}{subsubsection.3.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Flutter and Dart}{2}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}The Impeller Rendering Engine}{2}{subsection.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}Key Metrics}{2}{subsection.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}Related Work}{2}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Evolution of Cross-Platform Frameworks}{2}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Performance Benchmarking}{2}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Energy and Resource Efficiency}{2}{subsection.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Summary}{2}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Experimental Design}{3}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Approach}{3}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}The Artifact: Benchmark Application}{3}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-B}1}CPU Stress Test (Sieve of Eratosthenes)}{3}{subsubsection.4.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-B}2}GPU Rendering Test (Complex List)}{3}{subsubsection.4.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-B}3}Engine Initialization Time (Framework-to-Frame)}{3}{subsubsection.4.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Test Environment}{3}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}Reproducibility}{3}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-E}}Use of AI Tools}{3}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Results}{3}{section.5}\protected@file@percent }
 \citation{nawrocki2021}
 \citation{impeller2024}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-B}3}Engine Initialization Time (Framework-to-Frame)}{3}{subsubsection.3.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}Test Environment}{3}{subsection.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Reproducibility}{3}{subsection.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {IV}Results}{3}{section.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}CPU Efficiency (Single-Threaded)}{3}{subsection.4.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Average execution time for Sieve of Eratosthenes ($n = 10^6$). Native Swift is approximately $4.5\times $ faster than Dart.}}{3}{figure.1}\protected@file@percent }
-\newlabel{fig:cpu}{{1}{3}{Average execution time for Sieve of Eratosthenes ($n = 10^6$). Native Swift is approximately $4.5\times $ faster than Dart}{figure.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}GPU Rendering and Stability}{3}{subsection.4.2}\protected@file@percent }
 \citation{nawrocki2021}
-\citation{impeller2024}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}CPU Efficiency (Single-Threaded)}{4}{subsection.5.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Average execution time for Sieve of Eratosthenes ($n = 10^6$). Native Swift is approximately $4.5\times $ faster than Dart.}}{4}{figure.1}\protected@file@percent }
+\newlabel{fig:cpu}{{1}{4}{Average execution time for Sieve of Eratosthenes ($n = 10^6$). Native Swift is approximately $4.5\times $ faster than Dart}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}GPU Rendering and Stability}{4}{subsection.5.2}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Rendering stability during complex list scrolling. Flutter (Impeller) achieved 0\% Jank.}}{4}{figure.2}\protected@file@percent }
 \newlabel{fig:gpu}{{2}{4}{Rendering stability during complex list scrolling. Flutter (Impeller) achieved 0\% Jank}{figure.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Engine Initialization Time}{4}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Engine Initialization Time}{4}{subsection.5.3}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Engine Initialization Time (Framework-to-Frame). Flutter initializes approximately $2.4\times $ faster.}}{4}{figure.3}\protected@file@percent }
 \newlabel{fig:init}{{3}{4}{Engine Initialization Time (Framework-to-Frame). Flutter initializes approximately $2.4\times $ faster}{figure.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}Resource Footprint}{4}{subsection.4.4}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Consolidated benchmark results (iPhone~14, $n = 30$ runs).}}{4}{table.1}\protected@file@percent }
-\newlabel{tab:summary}{{I}{4}{Consolidated benchmark results (iPhone~14, $n = 30$ runs)}{table.1}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Baseline memory footprint (Idle). Native iOS requires significantly less RAM.}}{4}{figure.4}\protected@file@percent }
-\newlabel{fig:memory}{{4}{4}{Baseline memory footprint (Idle). Native iOS requires significantly less RAM}{figure.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {V}Discussion}{4}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Interpretation of Results}{4}{subsection.5.1}\protected@file@percent }
+\citation{impeller2024}
 \citation{nawrocki2021}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}Resource Footprint}{5}{subsection.5.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Baseline memory footprint (Idle). Native iOS requires significantly less RAM.}}{5}{figure.4}\protected@file@percent }
+\newlabel{fig:memory}{{4}{5}{Baseline memory footprint (Idle). Native iOS requires significantly less RAM}{figure.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Consolidated benchmark results (iPhone~14, $n = 30$ runs).}}{5}{table.1}\protected@file@percent }
+\newlabel{tab:summary}{{I}{5}{Consolidated benchmark results (iPhone~14, $n = 30$ runs)}{table.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Discussion}{5}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}Interpretation of Results}{5}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}Practical Implications}{5}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}Limitations}{5}{subsection.6.3}\protected@file@percent }
 \bibstyle{IEEEtran}
 \bibdata{refs}
 \bibcite{statista2024}{1}
@@ -72,15 +86,16 @@
 \bibcite{flutter2024}{3}
 \bibcite{bjornhansen2020}{4}
 \bibcite{you2021}{5}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Practical Implications}{5}{subsection.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Limitations}{5}{subsection.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusion}{5}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{References}{5}{section*.1}\protected@file@percent }
 \bibcite{horn2023}{6}
-\bibcite{bjornhansen2018}{7}
-\bibcite{nawrocki2021}{8}
-\bibcite{pinto2021}{9}
-\bibcite{impeller2024}{10}
+\bibcite{apple2024swift}{7}
+\bibcite{apple2024swiftui}{8}
+\bibcite{dart2024}{9}
+\bibcite{bjornhansen2018}{10}
+\bibcite{impeller2024}{11}
+\bibcite{nawrocki2021}{12}
+\bibcite{pinto2021}{13}
+\@writefile{toc}{\contentsline {section}{\numberline {VII}Conclusion}{6}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{6}{section*.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{Appendix\nobreakspace  A: Software Configuration}{6}{section*.2}\protected@file@percent }
 \@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Software configuration used for benchmarking.}}{6}{table.2}\protected@file@percent }
 \newlabel{tab:config}{{II}{6}{Software configuration used for benchmarking}{table.2}{}}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2026.2.20)  26 FEB 2026 22:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2026.2.20)  28 FEB 2026 17:08
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -351,11 +351,11 @@ Package hyperref Info: Link coloring OFF on input line 24.
 \openout3 = `paper.out'.
 
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 41.
+(Font)              <9> on input line 42.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 41.
+(Font)              <6> on input line 42.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 41.
+(Font)              <5> on input line 42.
 
 
 
@@ -364,81 +364,77 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 
 ]
-
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 139.
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 146.
-(/usr/local/texlive/2025basic/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 146.
+(Font)              <7> on input line 107.
+
+
+
+
+[2]
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 167.
  (/usr/local/texlive/2025basic/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
 
-[2]
-<figures/media/image4.png, id=191, 1606.0pt x 1337.99875pt>
+
+
+[3]
+<figures/media/image4.png, id=228, 1606.0pt x 1337.99875pt>
 File: figures/media/image4.png Graphic file (type png)
 <use figures/media/image4.png>
-Package pdftex.def Info: figures/media/image4.png  used on input line 207.
+Package pdftex.def Info: figures/media/image4.png  used on input line 231.
 (pdftex.def)             Requested size: 252.0pt x 209.93968pt.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 208.
-
-
-<figures/media/image3.png, id=194, 1606.0pt x 1337.99875pt>
+(Font)              <8> on input line 232.
+<figures/media/image3.png, id=231, 1606.0pt x 1337.99875pt>
 File: figures/media/image3.png Graphic file (type png)
 <use figures/media/image3.png>
-Package pdftex.def Info: figures/media/image3.png  used on input line 230.
+Package pdftex.def Info: figures/media/image3.png  used on input line 249.
 (pdftex.def)             Requested size: 252.0pt x 209.93968pt.
 
 
-[3 <./figures/media/image4.png>]
-<figures/media/image2.png, id=206, 1606.0pt x 1337.99875pt>
+<figures/media/image2.png, id=233, 1606.0pt x 1337.99875pt>
 File: figures/media/image2.png Graphic file (type png)
 <use figures/media/image2.png>
-Package pdftex.def Info: figures/media/image2.png  used on input line 250.
+Package pdftex.def Info: figures/media/image2.png  used on input line 268.
 (pdftex.def)             Requested size: 252.0pt x 209.93968pt.
 
 
-<figures/media/image1.png, id=209, 1606.0pt x 1337.99875pt>
+[4 <./figures/media/image4.png> <./figures/media/image3.png> <./figures/media/image2.png>]
+<figures/media/image1.png, id=247, 1606.0pt x 1337.99875pt>
 File: figures/media/image1.png Graphic file (type png)
 <use figures/media/image1.png>
-Package pdftex.def Info: figures/media/image1.png  used on input line 287.
+Package pdftex.def Info: figures/media/image1.png  used on input line 284.
 (pdftex.def)             Requested size: 252.0pt x 209.93968pt.
 
 
-[4 <./figures/media/image3.png> <./figures/media/image2.png> <./figures/media/image1.png>]
-
-(./paper.bbl
-
-[5])
 
 
+[5 <./figures/media/image1.png>] (./paper.bbl
 
-[6
+)
 
-] (./paper.aux)
+[6] (./paper.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 366449B30C543E2EEA6DE092AE462C35;4931.
+(rerunfilecheck)             Checksum: D555385BF22927B7E26DE8E1DE288F15;5823.
  ) 
 Here is how much of TeX's memory you used:
- 10020 strings out of 474662
- 161115 string characters out of 5751109
- 574261 words of memory out of 5000000
- 32877 multiletter control sequences out of 15000+600000
- 597978 words of font info for 102 fonts, out of 8000000 for 9000
+ 10015 strings out of 474662
+ 160998 string characters out of 5751109
+ 573371 words of memory out of 5000000
+ 32864 multiletter control sequences out of 15000+600000
+ 599849 words of font info for 103 fonts, out of 8000000 for 9000
  322 hyphenation exceptions out of 8191
- 75i,9n,79p,1138b,592s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,9n,79p,1140b,564s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2025basic/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper.pdf (6 pages, 541113 bytes).
+Output written on paper.pdf (6 pages, 544991 bytes).
 PDF statistics:
- 325 PDF objects out of 1000 (max. 8388607)
- 276 compressed objects within 3 object streams
- 62 named destinations out of 1000 (max. 500000)
- 261 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 365 PDF objects out of 1000 (max. 8388607)
+ 315 compressed objects within 4 object streams
+ 72 named destinations out of 1000 (max. 500000)
+ 309 words of extra memory for PDF output out of 10000 (max. 10000000)
 
